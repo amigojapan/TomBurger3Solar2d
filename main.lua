@@ -2,7 +2,7 @@
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
-tomInMotion=false
+
 -- Define grid boundaries
 local gridWidth = display.contentWidth
 local gridHeight = display.contentHeight
@@ -124,10 +124,21 @@ rat=display.newImage("img/rat_frame1.png", gridSize*13, gridSize*2,gridSize,grid
 rat.width=gridSize
 rat.height=gridSize
 rat.myName = "rat"
-tom=display.newImage("img/Tom.png", gridSize*10, gridSize*10,gridSize,gridSize)
+rat.InMotion=false
+
+tom = display.newGroup()
+--tom=display.newImage("img/Tom.png", gridSize*10, gridSize*10,gridSize,gridSize)
+tomImg = display.newImageRect( tom, "img/Tom.png", gridSize, gridSize )
+tomWithBroomImg = display.newImageRect( tom, "img/Tom_with_broom_frame1.png", gridSize, gridSize )
+tomWithBroomImg.isVisible=false
+tom.x = gridSize*10
+tom.y = gridSize*10
 tom.width=gridSize
 tom.height=gridSize
 tom.myName = "tom"
+tom.InMotion=false
+tom.holdingBroom=false
+
 --local pipe = display.newRect( pipeGroup, 400, 400, 200, 200 )
 pipe=display.newImage("img/pipe.png", 200, 200)
 pipe.isVisible = false
@@ -137,15 +148,57 @@ pipe.myName = "pipe"
   
 local col = display.newText( "collision:false", 0, 0, "fonts/ume-tgc5.ttf", 40 )
 --col.text="hey"
-function onCompletecallback()
-	tomInMotion=false
+
+function findSpriteInTable(spritesTable,id)
+	for _,v in pairs(spritesTable) do
+		if v.myName == id then
+			-- do something
+			return v
+		end
+	end
 end
 
-function moveInDirection(dx, dy, direction,movingObject)
-	if tomInMotion then
+-- Function to handle collision with kitchen items
+local function handleKitchenCollision(sprite)
+	if sprite.myName == "broom" then
+		sprite.isVisible = false
+		tomImg.isVisible = false -- tom 
+		tomWithBroomImg.isVisible = true
+		tom.holdingBroom=true
+	end
+	if sprite.myName ==  "trash_can" then
+		b= findSpriteInTable(kitchen,"broom")
+		b.isVisible=true
+		tomImg.isVisible = true -- tom 
+		tomWithBroomImg.isVisible = false
+		tom.holdingBroom=false
+	end
+end
+
+-- Function to handle collision with poops
+local function handlePoopCollision(sprite)
+	if sprite.myName == "aPoop" then
+		if tomWithBroomImg.isVisible then
+			--sprite.destroy()
+			sprite.isVisible = false --will need to check for this when reducing tom's life , it must be true
+		end
+	end
+end
+	
+
+function onCompletecallback(obj)
+	obj.InMotion=false
+end
+
+function moveInDirection(dx, dy, direction, movingObject)
+	if movingObject.myName == "tom" then
+		--happens when tom moves
+		--print(tostring(movingObject.InMotion))
+	end
+	if movingObject.InMotion then
 		return
 	end
-
+	
 	-- Calculate new position
 	local newX = movingObject.x + dx
 	local newY = movingObject.y + dy
@@ -155,9 +208,56 @@ function moveInDirection(dx, dy, direction,movingObject)
 		return
 	end
 
-	tomInMotion = true
+	movingObject.InMotion = true
 	movingObject:translate(dx, dy)
 	local collided=false
+
+    for key, sprite in pairs(kitchen) do
+        if detectCollision(
+                movingObject.x - (movingObject.width / 2),
+                movingObject.y - (movingObject.height / 2), 
+                movingObject.width, movingObject.height,
+                sprite.x - (sprite.width / 2),
+                sprite.y - (sprite.height / 2),
+                sprite.width, sprite.height
+            ) then
+            if movingObject.myName == "tom" then
+                -- happens when tom moves
+                col.text = "collision:true"
+                handleKitchenCollision(sprite)
+				if tom.holdingBroom  and  sprite.myName=="broom" then
+					collided=false
+					break	
+				end
+            end
+			collided = true
+        end
+    end
+
+    for key, sprite in pairs(poops) do
+        if detectCollision(
+                movingObject.x - (movingObject.width / 2),
+                movingObject.y - (movingObject.height / 2), 
+                movingObject.width, movingObject.height,
+                sprite.x - (sprite.width / 2),
+                sprite.y - (sprite.height / 2),
+                sprite.width, sprite.height
+            ) then
+            if movingObject.myName == "tom" then
+                -- happens when tom moves
+                col.text = "collision:true"
+                handlePoopCollision(sprite)
+            end
+			--collided = true
+        end
+    end
+
+    if collided then
+        movingObject.InMotion = false
+    end
+
+
+	--[[
 	for key, sprite in pairs(kitchen) do
 		if detectCollision(
 				movingObject.x - (movingObject.width / 2),
@@ -167,12 +267,40 @@ function moveInDirection(dx, dy, direction,movingObject)
 				sprite.y - (sprite.height / 2),
 				sprite.width, sprite.height
 			) then
-			col.text = "collision:true"
-			tomInMotion = false
-			collided=true
-			--return
+			if movingObject.myName == "tom" then
+				--happens when tom moves
+				col.text = "collision:true"
+				if sprite.myName == "broom" then
+					sprite.isVisible=false
+					tomImg.isVisible=false--tom 
+					tomWithBroomImg.isVisible=true
+				end
+			end
 		end
-	end
+
+	for key, sprite in pairs(poops) do
+		if detectCollision(
+		movingObject.x - (movingObject.width / 2),
+		movingObject.y - (movingObject.height / 2), 
+		movingObject.width, movingObject.height,
+		sprite.x - (sprite.width / 2),
+		sprite.y - (sprite.height / 2),
+		sprite.width, sprite.height
+		) then
+			if movingObject.myName == "tom" then
+			--happens when tom moves
+			col.text = "collision:true"
+			if sprite.myName == "aPoop" then
+				if tomWithBroomImg.isVisible then
+					sprite.isVisible=false
+				end
+			end
+		end
+		movingObject.InMotion = false
+		collided=true
+		--return
+		end
+		]]
 	movingObject:translate(-dx, -dy)
 	-- If no collision, move movingObject to the new position
 	if direction == "left" and not collided then
@@ -270,7 +398,8 @@ local fireTimer
 
 local function myLeftTouchListener( event )
     if ( event.phase == "began" ) then
-		fireTimer = timer.performWithDelay( 10, moveTomLeft, 0 )
+		moveTomLeft()
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomLeft, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended") then
 		timer.cancel( fireTimer )
@@ -284,7 +413,8 @@ myLeftButton:addEventListener( "touch", myLeftTouchListener )  -- Add a "touch" 
 
 local function myRightTouchListener( event )
     if ( event.phase == "began" ) then
-		fireTimer = timer.performWithDelay( 10, moveTomRight, 0 )
+		moveTomRight()
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomRight, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended") then
 		timer.cancel( fireTimer )
@@ -296,7 +426,8 @@ myRightButton:addEventListener( "touch", myRightTouchListener )  -- Add a "touch
 
 local function myUpTouchListener( event )
     if ( event.phase == "began" ) then
-		fireTimer = timer.performWithDelay( 10, moveTomUp, 0 )
+		moveTomUp()
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomUp, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended") then
 		timer.cancel( fireTimer )
@@ -308,7 +439,8 @@ myUpButton:addEventListener( "touch", myUpTouchListener )  -- Add a "touch" list
 
 local function myDownTouchListener( event )
     if ( event.phase == "began" ) then
-		fireTimer = timer.performWithDelay( 10, moveTomDown, 0 )
+		moveTomDown()
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomDown, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended") then
 		timer.cancel( fireTimer )
@@ -319,7 +451,7 @@ local myDownButton = display.newRect( 400+offsetx, 400+offsety, 100, 100 )
 myDownButton:addEventListener( "touch", myDownTouchListener )  -- Add a "touch" listener to the obj
 
 
-local moveRatTimer
+local fireRatTimer
 function gameloop()
 
 	--moveRatInRandomDirection
@@ -335,7 +467,7 @@ function gameloop()
 	end
 end
 
-fireRatTimer = timer.performWithDelay( 501, gameloop, 0 )
+fireRatTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, gameloop, 0 )
 
 --poop table
 poops ={}
@@ -362,9 +494,16 @@ poopTimer = timer.performWithDelay( 50000, poop, 0 )
 
 --(done)block Tom from going out of the play area
 
---make the rat and tom have sepperate moving  variables so they can move seperately
+--(fixed(you cant put a parameter in the oncomplete function in the --transition function, this was causing the obscure bug)
+--keep tom (?and rat) inside grid area
 
---make tom take the broom
+--(done)make the rat and tom have sepperate moving  variables so they can move seperately
+
+--(done)make tom take the broom
+
+--handle the onbutton move event, it gets stuck now if you
+--move your finger during touch
+
 
 --add all sprites to a group so tom can be at the top of the group
 --all the time
