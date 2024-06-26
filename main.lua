@@ -8,11 +8,11 @@ local gridWidth = display.contentWidth
 local gridHeight = display.contentHeight
 
 --draw tiled backgouod
-for x = 0, 	display.contentWidth,gridSize 
+for x = 1, 	15
 do
-	for y = 0,display.contentWidth,gridSize 
+	for y = 1, 11 
 	do
-		local myRectangle = display.newRect(x, y, gridSize, gridSize )
+		local myRectangle = display.newRect(x*gridSize, y*gridSize, gridSize, gridSize )
 		myRectangle.strokeWidth = 5
 		myRectangle:setFillColor( 0.5,0 , 0 )
 		myRectangle:setStrokeColor( 0, 0, 0 )
@@ -83,24 +83,24 @@ resizeObjectToGridSize(wrapper_yellow,"wrapper_yellow")
 wrapper_red=display.newImage("img/wrapper_red.png", gridSize*8, gridSize*2,gridSize,gridSize)
 resizeObjectToGridSize(wrapper_red,"wrapper_red")
 --teppan
-teppan_empty=display.newImage("img/teppan_empty.png", gridSize*14, gridSize*6,gridSize,gridSize)
+teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*7,gridSize,gridSize)
 resizeObjectToGridSize(teppan_empty,"teppan_empty")
-teppan_empty=display.newImage("img/teppan_empty.png", gridSize*14, gridSize*7,gridSize,gridSize)
+teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*8,gridSize,gridSize)
 resizeObjectToGridSize(teppan_empty,"teppan_empty")
-teppan_empty=display.newImage("img/teppan_empty.png", gridSize*14, gridSize*8,gridSize,gridSize)
+teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*9,gridSize,gridSize)
 resizeObjectToGridSize(teppan_empty,"teppan_empty")
-teppan_empty=display.newImage("img/teppan_empty.png", gridSize*14, gridSize*9,gridSize,gridSize)
+teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*10,gridSize,gridSize)
 resizeObjectToGridSize(teppan_empty,"teppan_empty")
-spatchula_tray_with_spatchula=display.newImage("img/spatchula_tray_with_spatchula.png", gridSize*14, gridSize*10,gridSize,gridSize)
+spatchula_tray_with_spatchula=display.newImage("img/spatchula_tray_with_spatchula_rotated.png", gridSize*1, gridSize*11,gridSize,gridSize)
 resizeObjectToGridSize(spatchula_tray_with_spatchula,"spatchula_tray_with_spatchula")
 --lower items
-fridge2=display.newImage("img/fridge.png", gridSize*11, gridSize*10,gridSize,gridSize)
+fridge2=display.newImage("img/fridge.png", gridSize*11, gridSize*11,gridSize,gridSize)
 resizeObjectToGridSize(fridge2,"fridge2")
-toaster_off=display.newImage("img/toaster_off.png", gridSize*8, gridSize*10,gridSize,gridSize)
+toaster_off=display.newImage("img/toaster_off.png", gridSize*8, gridSize*11,gridSize,gridSize)
 resizeObjectToGridSize(toaster_off,"toaster_off")
-trash_can=display.newImage("img/trash_can.png", gridSize*6, gridSize*10,gridSize,gridSize)
+trash_can=display.newImage("img/trash_can.png", gridSize*6, gridSize*11,gridSize,gridSize)
 resizeObjectToGridSize(trash_can,"trash_can")
-broom=display.newImage("img/broom.png", gridSize*5, gridSize*10,gridSize,gridSize)
+broom=display.newImage("img/broom.png", gridSize*5, gridSize*11,gridSize,gridSize)
 resizeObjectToGridSize(broom,"broom")
 
 --local instructions = display.newText( "日本語", 100, 100, "fonts/ume-tgc5.ttf", 100 )
@@ -256,51 +256,6 @@ function moveInDirection(dx, dy, direction, movingObject)
         movingObject.InMotion = false
     end
 
-
-	--[[
-	for key, sprite in pairs(kitchen) do
-		if detectCollision(
-				movingObject.x - (movingObject.width / 2),
-				movingObject.y - (movingObject.height / 2), 
-				movingObject.width, movingObject.height,
-				sprite.x - (sprite.width / 2),
-				sprite.y - (sprite.height / 2),
-				sprite.width, sprite.height
-			) then
-			if movingObject.myName == "tom" then
-				--happens when tom moves
-				col.text = "collision:true"
-				if sprite.myName == "broom" then
-					sprite.isVisible=false
-					tomImg.isVisible=false--tom 
-					tomWithBroomImg.isVisible=true
-				end
-			end
-		end
-
-	for key, sprite in pairs(poops) do
-		if detectCollision(
-		movingObject.x - (movingObject.width / 2),
-		movingObject.y - (movingObject.height / 2), 
-		movingObject.width, movingObject.height,
-		sprite.x - (sprite.width / 2),
-		sprite.y - (sprite.height / 2),
-		sprite.width, sprite.height
-		) then
-			if movingObject.myName == "tom" then
-			--happens when tom moves
-			col.text = "collision:true"
-			if sprite.myName == "aPoop" then
-				if tomWithBroomImg.isVisible then
-					sprite.isVisible=false
-				end
-			end
-		end
-		movingObject.InMotion = false
-		collided=true
-		--return
-		end
-		]]
 	movingObject:translate(-dx, -dy)
 	-- If no collision, move movingObject to the new position
 	if direction == "left" and not collided then
@@ -408,7 +363,14 @@ local function myLeftTouchListener( event )
 end
 offsetx=450
 offsety=300
+
+local paint = {
+    type = "image",
+    filename = "img/arrowLeft.png"
+}
 local myLeftButton = display.newRect( 300+offsetx, 300+offsety, 100, 100 )
+myLeftButton.fill = paint
+
 myLeftButton:addEventListener( "touch", myLeftTouchListener )  -- Add a "touch" listener to the obj
 
 local function myRightTouchListener( event )
@@ -421,7 +383,12 @@ local function myRightTouchListener( event )
 	end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
+local paint = {
+    type = "image",
+    filename = "img/arrowRight.png"
+}
 local myRightButton = display.newRect( 500+offsetx, 300+offsety, 100, 100 )
+myRightButton.fill = paint
 myRightButton:addEventListener( "touch", myRightTouchListener )  -- Add a "touch" listener to the obj
 
 local function myUpTouchListener( event )
@@ -434,7 +401,12 @@ local function myUpTouchListener( event )
     end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
+local paint = {
+    type = "image",
+    filename = "img/arrowUp.png"
+}
 local myUpButton = display.newRect( 400+offsetx, 200+offsety, 100, 100 )
+myUpButton.fill = paint
 myUpButton:addEventListener( "touch", myUpTouchListener )  -- Add a "touch" listener to the obj
 
 local function myDownTouchListener( event )
@@ -447,7 +419,12 @@ local function myDownTouchListener( event )
     end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
+local paint = {
+    type = "image",
+    filename = "img/arrowDown.png"
+}
 local myDownButton = display.newRect( 400+offsetx, 400+offsety, 100, 100 )
+myDownButton.fill = paint
 myDownButton:addEventListener( "touch", myDownTouchListener )  -- Add a "touch" listener to the obj
 
 
@@ -474,7 +451,15 @@ poops ={}
 
 local poopTimer
 function poop()
-	newPoop = display.newImage("img/poop_frame1.png", rat.x, rat.y,gridSize,gridSize)
+	local freeze={}
+	freeze.x=rat.x
+	freeze.y=rat.y
+	newPoop = display.newGroup()
+	newPoop.poop_frame1 = display.newImageRect( newPoop, "img/poop_frame1.png", gridSize, gridSize )
+	newPoop.poop_frame2 = display.newImageRect( newPoop, "img/poop_frame2.png", gridSize, gridSize )
+	newPoop.poop_frame2.isVisible=false
+	newPoop.x = freeze.x
+	newPoop.y = freeze.y
 	newPoop.width=gridSize
 	newPoop.height=gridSize
 	newPoop.myName = "aPoop"
@@ -482,6 +467,22 @@ function poop()
 end
 
 poopTimer = timer.performWithDelay( 50000, poop, 0 )
+
+local animationLoopTimer
+function animationLoop()
+	for key, sprite in pairs(poops) do
+		if(sprite.isVisible) then
+			if(sprite.poop_frame1.isVisible) then
+				sprite.poop_frame1.isVisible=false
+				sprite.poop_frame2.isVisible=true
+			else
+				sprite.poop_frame1.isVisible=true
+				sprite.poop_frame2.isVisible=false				
+			end
+		end
+	end
+end
+animationLoopTimer = timer.performWithDelay( 200, animationLoop, 0 )
 --(done)
 --amigojapan> Zcom: primero muevo el esprite sobre el otro 
 --objecto(sin mostrarlo) luego si hay collision, consigo el 
