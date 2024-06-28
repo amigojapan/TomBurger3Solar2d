@@ -8,11 +8,11 @@ local gridWidth = display.contentWidth
 local gridHeight = display.contentHeight
 
 --draw tiled backgouod
-for x = 0, 	display.contentWidth,gridSize 
+for x = 1, 	15
 do
-	for y = 0,display.contentWidth,gridSize 
+	for y = 1, 11 
 	do
-		local myRectangle = display.newRect(x, y, gridSize, gridSize )
+		local myRectangle = display.newRect(x*gridSize, y*gridSize, gridSize, gridSize )
 		myRectangle.strokeWidth = 5
 		myRectangle:setFillColor( 0.5,0 , 0 )
 		myRectangle:setStrokeColor( 0, 0, 0 )
