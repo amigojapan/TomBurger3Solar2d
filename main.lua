@@ -8,6 +8,8 @@ timeForMoveInMilliseconds=500
 local gridWidth = display.contentWidth
 local gridHeight = display.contentHeight
 
+
+
 --draw tiled backgouod
 for x = 1, 	15
 do
@@ -64,6 +66,8 @@ dresser_table1 = display.newGroup()
 dresser_table1.dresser_table_emptyImg = display.newImageRect( dresser_table1, "img/dresser_slot_empty.png", gridSize, gridSize )
 dresser_table1.dresser_table_ketchupImg = display.newImageRect( dresser_table1, "img/dresser_slot_ketchup.png", gridSize, gridSize )
 dresser_table1.dresser_table_mustardImg = display.newImageRect( dresser_table1, "img/dresser_slot_mustard.png", gridSize, gridSize )
+dresser_table1.dresser_table_buns = display.newImageRect( dresser_table1, "img/dresser_slot_buns.png", gridSize, gridSize )
+dresser_table1.dresser_table_buns.isVisible=false
 dresser_table1.dresser_table_mustardImg.isVisible=false
 dresser_table1.dresser_table_emptyImg.isVisible=false
 dresser_table1.dresser_table_ketchupImg.isVisible=true
@@ -77,6 +81,8 @@ dresser_table2 = display.newGroup()
 dresser_table2.dresser_table_emptyImg = display.newImageRect( dresser_table2, "img/dresser_slot_empty.png", gridSize, gridSize )
 dresser_table2.dresser_table_ketchupImg = display.newImageRect( dresser_table2, "img/dresser_slot_ketchup.png", gridSize, gridSize )
 dresser_table2.dresser_table_mustardImg = display.newImageRect( dresser_table2, "img/dresser_slot_mustard.png", gridSize, gridSize )
+dresser_table2.dresser_table_buns = display.newImageRect( dresser_table2, "img/dresser_slot_buns.png", gridSize, gridSize )
+dresser_table2.dresser_table_buns.isVisible=false
 dresser_table2.dresser_table_emptyImg.isVisible=false
 dresser_table2.dresser_table_ketchupImg.isVisible=false
 dresser_table2.dresser_table_mustardImg.isVisible=true
@@ -90,6 +96,8 @@ dresser_table3 = display.newGroup()
 dresser_table3.dresser_table_emptyImg = display.newImageRect( dresser_table3, "img/dresser_slot_empty.png", gridSize, gridSize )
 dresser_table3.dresser_table_ketchupImg = display.newImageRect( dresser_table3, "img/dresser_slot_ketchup.png", gridSize, gridSize )
 dresser_table3.dresser_table_mustardImg = display.newImageRect( dresser_table3, "img/dresser_slot_mustard.png", gridSize, gridSize )
+dresser_table3.dresser_table_buns = display.newImageRect( dresser_table3, "img/dresser_slot_buns.png", gridSize, gridSize )
+dresser_table3.dresser_table_buns.isVisible=false
 dresser_table3.dresser_table_emptyImg.isVisible=true
 dresser_table3.dresser_table_ketchupImg.isVisible=false
 dresser_table3.dresser_table_mustardImg.isVisible=false
@@ -103,6 +111,8 @@ dresser_table4 = display.newGroup()
 dresser_table4.dresser_table_emptyImg = display.newImageRect( dresser_table4, "img/dresser_slot_empty.png", gridSize, gridSize )
 dresser_table4.dresser_table_ketchupImg = display.newImageRect( dresser_table4, "img/dresser_slot_ketchup.png", gridSize, gridSize )
 dresser_table4.dresser_table_mustardImg = display.newImageRect( dresser_table4, "img/dresser_slot_mustard.png", gridSize, gridSize )
+dresser_table4.dresser_table_buns = display.newImageRect( dresser_table4, "img/dresser_slot_buns.png", gridSize, gridSize )
+dresser_table4.dresser_table_buns.isVisible=false
 dresser_table4.dresser_table_emptyImg.isVisible=true
 dresser_table4.dresser_table_ketchupImg.isVisible=false
 dresser_table4.dresser_table_mustardImg.isVisible=false
@@ -116,6 +126,8 @@ dresser_table5 = display.newGroup()
 dresser_table5.dresser_table_emptyImg = display.newImageRect( dresser_table5, "img/dresser_slot_empty.png", gridSize, gridSize )
 dresser_table5.dresser_table_ketchupImg = display.newImageRect( dresser_table5, "img/dresser_slot_ketchup.png", gridSize, gridSize )
 dresser_table5.dresser_table_mustardImg = display.newImageRect( dresser_table5, "img/dresser_slot_mustard.png", gridSize, gridSize )
+dresser_table5.dresser_table_buns = display.newImageRect( dresser_table5, "img/dresser_slot_buns.png", gridSize, gridSize )
+dresser_table5.dresser_table_buns.isVisible=false
 dresser_table5.dresser_table_emptyImg.isVisible=true
 dresser_table5.dresser_table_ketchupImg.isVisible=false
 dresser_table5.dresser_table_mustardImg.isVisible=false
@@ -223,7 +235,7 @@ pipe.isVisible = false
 pipe.myName = "pipe"
 --handle collision
   
-local col = display.newText( debugVersion .. "collision:false", 0, 0, "fonts/ume-tgc5.ttf", 40 )
+local col = display.newText( debugVersion .. "collision:false",  gridSize*2, gridSize*2, "fonts/ume-tgc5.ttf", 40 )
 --col.text="hey"
 
 function findSpriteInTable(spritesTable,id)
@@ -253,11 +265,11 @@ function endToasting()
 	print("Toasting ended")
 	toaster.toaster_onImg.isVisible=false
 	toaster.toaster_offImg.isVisible=true
-	tomWaitingBunsImg=false
+	tomWaitingBunsImg.isVisible=false
 	tomWithBunsImg.isVisible=true
 end
 function ketchupGrab(sprite)
-	if sprite.dresser_table_ketchupImg.isVisible and tomWithMustardImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
+	if tomWithBunsImg.isVisible==false and tomWithKetchupImg.isVisible==false and sprite.dresser_table_ketchupImg.isVisible and tomWithMustardImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Grabbed Ketchup")
@@ -268,7 +280,7 @@ function ketchupGrab(sprite)
 	end
 end
 function mustardGrab(sprite)
-	if sprite.dresser_table_mustardImg.isVisible and tomWithKetchupImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
+	if tomWithBunsImg.isVisible==false and tomWithMustardImg.isVisible==false and sprite.dresser_table_mustardImg.isVisible and tomWithKetchupImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Grabbed mustard")
@@ -312,6 +324,19 @@ function toast(sprite)
 		toaster.toaster_onImg.isVisible=true
 	end
 end
+function putBunsOnTable(sprite)
+	--print("sprite.dresser_table_emptyImg.isVisible:"..tostring(sprite.dresser_table_emptyImg.isVisible))
+	if  sprite.dresser_table_emptyImg.isVisible and tomImg.isVisible==false and tomWithBunsImg.isVisible and tom.waitingToGrabAgain==false then
+		--fix that you can put buns where mustard adn ketchup are
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Put buns on dressing table")
+		tomImg.isVisible = true
+		tomWithBunsImg.isVisible=false
+		sprite.dresser_table_emptyImg.isVisible=false
+		sprite.dresser_table_buns.isVisible=true
+	end
+end
 
 local function handleKitchenCollision(sprite)
 	if sprite.myName == "Toaster" then
@@ -327,6 +352,11 @@ local function handleKitchenCollision(sprite)
 		tom.holdingBroom=true
 	end
 	if sprite.myName ==  "trash_can" then
+		if tomWithBunsImg.isVisible then
+			tomWithBunsImg.isVisible=false
+			tomImg.isVisible=true
+			return
+		end
 		b= findSpriteInTable(kitchen,"broom")
 		b.isVisible=true
 		tomImg.isVisible = true -- tom 
@@ -344,8 +374,8 @@ local function handleKitchenCollision(sprite)
 	sprite.myName ==  "Dresser Table slot 4"
 	or
 	sprite.myName ==  "Dresser Table slot 5"
-
 	then
+		putBunsOnTable(sprite)
 		ketchupGrab(sprite)
 		ketchupRetrun(sprite)
 		mustardGrab(sprite)
@@ -666,6 +696,19 @@ function animationLoop()
 	end
 end
 animationLoopTimer = timer.performWithDelay( 200, animationLoop, 0 )
+
+
+audio.reserveChannels( 1 )
+-- Reduce the overall volume of the channel
+audio.setVolume( 1, { channel=1 } )
+
+
+-- Load audio
+musicTrack = audio.loadStream( "audio/Tom.wav",system.ResourceDirectory)
+ 
+-- Play the background music on channel 1, loop infinitely 
+audio.play( musicTrack, { channel=1, loops=-1 } )
+ 
 --(done)
 --amigojapan> Zcom: primero muevo el esprite sobre el otro 
 --objecto(sin mostrarlo) luego si hay collision, consigo el 
