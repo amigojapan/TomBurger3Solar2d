@@ -8,6 +8,8 @@ timeForMoveInMilliseconds=500
 local gridWidth = display.contentWidth
 local gridHeight = display.contentHeight
 
+
+
 --draw tiled backgouod
 for x = 1, 	15
 do
@@ -60,81 +62,69 @@ resizeObjectToGridSize(orders_spindle,"orders_spindle")
 fry_scale_empty=display.newImage("img/fry_scale_empty.png", gridSize*5, gridSize*4,gridSize,gridSize)
 resizeObjectToGridSize(fry_scale_empty,"fry_scale_empty")
 
-dresser_table1 = display.newGroup()
-dresser_table1.dresser_table_emptyImg = display.newImageRect( dresser_table1, "img/dresser_slot_empty.png", gridSize, gridSize )
-dresser_table1.dresser_table_ketchupImg = display.newImageRect( dresser_table1, "img/dresser_slot_ketchup.png", gridSize, gridSize )
-dresser_table1.dresser_table_mustardImg = display.newImageRect( dresser_table1, "img/dresser_slot_mustard.png", gridSize, gridSize )
-dresser_table1.dresser_table_buns = display.newImageRect( dresser_table1, "img/dresser_slot_buns.png", gridSize, gridSize )
+function dresserTablePrepareObj(x,y)
+	obj = display.newGroup()
+	obj.dresser_table_emptyImg = display.newImageRect(obj, "img/dresser_slot_empty.png", gridSize, gridSize )
+	obj.dresser_table_ketchupImg = display.newImageRect(obj, "img/dresser_slot_ketchup.png", gridSize, gridSize )
+	obj.dresser_table_mustardImg = display.newImageRect(obj, "img/dresser_slot_mustard.png", gridSize, gridSize )
+	obj.dresser_table_buns = display.newImageRect(obj, "img/dresser_slot_buns.png", gridSize, gridSize )
+	obj.dresser_table_buns_with_ketchup = display.newImageRect(obj, "img/dresser_slot_buns_ketchup.png", gridSize, gridSize )
+	obj.dresser_table_buns_with_mustard = display.newImageRect(obj, "img/dresser_slot__buns_mustard.png", gridSize, gridSize )
+	obj.dresser_table_buns_with_pickles = display.newImageRect(obj, "img/dresser_slot_buns_pickles.png", gridSize, gridSize )
+	obj.dresser_table_burger = display.newImageRect(obj, "img/dresser_slot_burger.png", gridSize, gridSize )
+	obj.dresser_table_cheese_burger = display.newImageRect(obj, "img/dresser_slot_cheeese_burger.png", gridSize, gridSize )
+	obj.dresser_table_emptyImg.isVisible=false
+	obj.dresser_table_ketchupImg.isVisible=false
+	obj.dresser_table_mustardImg.isVisible=false
+	obj.dresser_table_buns.isVisible=false
+	obj.dresser_table_buns_with_ketchup.isVisible=false
+	obj.dresser_table_buns_with_mustard.isVisible=false
+	obj.dresser_table_buns_with_pickles.isVisible=false
+	obj.dresser_table_burger.isVisible=false
+	obj.dresser_table_cheese_burger.isVisible=false
+	obj.x = x
+	obj.y = y	
+	obj.width=gridSize
+	obj.height=gridSize
+	table.insert(kitchen, obj)
+	return obj
+end
+
+dresser_table1 = dresserTablePrepareObj(gridSize*7,gridSize*4)
 dresser_table1.dresser_table_buns.isVisible=false
 dresser_table1.dresser_table_mustardImg.isVisible=false
 dresser_table1.dresser_table_emptyImg.isVisible=false
 dresser_table1.dresser_table_ketchupImg.isVisible=true
-dresser_table1.x = gridSize*7
-dresser_table1.y = gridSize*4
-dresser_table1.width=gridSize
-dresser_table1.height=gridSize
 dresser_table1.myName = "Dresser Table slot 1"
-table.insert(kitchen, dresser_table1)
-dresser_table2 = display.newGroup()
-dresser_table2.dresser_table_emptyImg = display.newImageRect( dresser_table2, "img/dresser_slot_empty.png", gridSize, gridSize )
-dresser_table2.dresser_table_ketchupImg = display.newImageRect( dresser_table2, "img/dresser_slot_ketchup.png", gridSize, gridSize )
-dresser_table2.dresser_table_mustardImg = display.newImageRect( dresser_table2, "img/dresser_slot_mustard.png", gridSize, gridSize )
-dresser_table2.dresser_table_buns = display.newImageRect( dresser_table2, "img/dresser_slot_buns.png", gridSize, gridSize )
+
+dresser_table2 = dresserTablePrepareObj(gridSize*8,gridSize*4)
 dresser_table2.dresser_table_buns.isVisible=false
 dresser_table2.dresser_table_emptyImg.isVisible=false
 dresser_table2.dresser_table_ketchupImg.isVisible=false
 dresser_table2.dresser_table_mustardImg.isVisible=true
-dresser_table2.x = gridSize*8
-dresser_table2.y = gridSize*4
-dresser_table2.width=gridSize
-dresser_table2.height=gridSize
 dresser_table2.myName = "Dresser Table slot 2"
-table.insert(kitchen, dresser_table2)
-dresser_table3 = display.newGroup()
-dresser_table3.dresser_table_emptyImg = display.newImageRect( dresser_table3, "img/dresser_slot_empty.png", gridSize, gridSize )
-dresser_table3.dresser_table_ketchupImg = display.newImageRect( dresser_table3, "img/dresser_slot_ketchup.png", gridSize, gridSize )
-dresser_table3.dresser_table_mustardImg = display.newImageRect( dresser_table3, "img/dresser_slot_mustard.png", gridSize, gridSize )
-dresser_table3.dresser_table_buns = display.newImageRect( dresser_table3, "img/dresser_slot_buns.png", gridSize, gridSize )
+
+dresser_table3 = dresserTablePrepareObj(gridSize*9,gridSize*4)
 dresser_table3.dresser_table_buns.isVisible=false
 dresser_table3.dresser_table_emptyImg.isVisible=true
 dresser_table3.dresser_table_ketchupImg.isVisible=false
 dresser_table3.dresser_table_mustardImg.isVisible=false
-dresser_table3.x = gridSize*9
-dresser_table3.y = gridSize*4
-dresser_table3.width=gridSize
-dresser_table3.height=gridSize
 dresser_table3.myName = "Dresser Table slot 3"
 table.insert(kitchen, dresser_table3)
-dresser_table4 = display.newGroup()
-dresser_table4.dresser_table_emptyImg = display.newImageRect( dresser_table4, "img/dresser_slot_empty.png", gridSize, gridSize )
-dresser_table4.dresser_table_ketchupImg = display.newImageRect( dresser_table4, "img/dresser_slot_ketchup.png", gridSize, gridSize )
-dresser_table4.dresser_table_mustardImg = display.newImageRect( dresser_table4, "img/dresser_slot_mustard.png", gridSize, gridSize )
-dresser_table4.dresser_table_buns = display.newImageRect( dresser_table4, "img/dresser_slot_buns.png", gridSize, gridSize )
+
+dresser_table4 = dresserTablePrepareObj(gridSize*10,gridSize*4)
 dresser_table4.dresser_table_buns.isVisible=false
 dresser_table4.dresser_table_emptyImg.isVisible=true
 dresser_table4.dresser_table_ketchupImg.isVisible=false
 dresser_table4.dresser_table_mustardImg.isVisible=false
-dresser_table4.x = gridSize*10
-dresser_table4.y = gridSize*4
-dresser_table4.width=gridSize
-dresser_table4.height=gridSize
 dresser_table4.myName = "Dresser Table slot 4"
-table.insert(kitchen, dresser_table4)
-dresser_table5 = display.newGroup()
-dresser_table5.dresser_table_emptyImg = display.newImageRect( dresser_table5, "img/dresser_slot_empty.png", gridSize, gridSize )
-dresser_table5.dresser_table_ketchupImg = display.newImageRect( dresser_table5, "img/dresser_slot_ketchup.png", gridSize, gridSize )
-dresser_table5.dresser_table_mustardImg = display.newImageRect( dresser_table5, "img/dresser_slot_mustard.png", gridSize, gridSize )
-dresser_table5.dresser_table_buns = display.newImageRect( dresser_table5, "img/dresser_slot_buns.png", gridSize, gridSize )
+
+dresser_table5 = dresserTablePrepareObj(gridSize*11,gridSize*4)
 dresser_table5.dresser_table_buns.isVisible=false
 dresser_table5.dresser_table_emptyImg.isVisible=true
 dresser_table5.dresser_table_ketchupImg.isVisible=false
 dresser_table5.dresser_table_mustardImg.isVisible=false
-dresser_table5.x = gridSize*11
-dresser_table5.y = gridSize*4
-dresser_table5.width=gridSize
-dresser_table5.height=gridSize
 dresser_table5.myName = "Dresser Table slot 5"
-table.insert(kitchen, dresser_table5)
 
 
 pickles_tray=display.newImage("img/pickles_tray.png", gridSize*11, gridSize*2,gridSize,gridSize)
@@ -335,6 +325,31 @@ function putBunsOnTable(sprite)
 		sprite.dresser_table_buns.isVisible=true
 	end
 end
+function putKetchupOnBuns(sprite)
+	--print("sprite.dresser_table_emptyImg.isVisible:"..tostring(sprite.dresser_table_emptyImg.isVisible))
+	if  sprite.dresser_table_buns.isVisible and tomWithKetchupImg.isVisible and tom.waitingToGrabAgain==false then
+		--fix that you can put buns where mustard adn ketchup are
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Put ketchup on buns")
+	
+		sprite.dresser_table_buns.isVisible=false
+		sprite.dresser_table_buns_with_ketchup.isVisible=true
+	end
+end
+function putMustardOnBunsWithKetchup(sprite)
+	--print("sprite.dresser_table_emptyImg.isVisible:"..tostring(sprite.dresser_table_emptyImg.isVisible))
+	if  sprite.dresser_table_buns_with_ketchup.isVisible and tomWithMustardImg.isVisible and tom.waitingToGrabAgain==false then
+		--fix that you can put buns where mustard adn ketchup are
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Put ketchup on buns")
+	
+		sprite.dresser_table_buns_with_ketchup.isVisible=false
+		sprite.dresser_table_buns_with_mustard.isVisible=true
+	end
+end
+
 
 local function handleKitchenCollision(sprite)
 	if sprite.myName == "Toaster" then
@@ -350,6 +365,11 @@ local function handleKitchenCollision(sprite)
 		tom.holdingBroom=true
 	end
 	if sprite.myName ==  "trash_can" then
+		if tomWithBunsImg.isVisible then
+			tomWithBunsImg.isVisible=false
+			tomImg.isVisible=true
+			return
+		end
 		b= findSpriteInTable(kitchen,"broom")
 		b.isVisible=true
 		tomImg.isVisible = true -- tom 
@@ -368,6 +388,9 @@ local function handleKitchenCollision(sprite)
 	or
 	sprite.myName ==  "Dresser Table slot 5"
 	then
+		--order is important
+		putMustardOnBunsWithKetchup(sprite)
+		putKetchupOnBuns(sprite)
 		putBunsOnTable(sprite)
 		ketchupGrab(sprite)
 		ketchupRetrun(sprite)
@@ -689,6 +712,19 @@ function animationLoop()
 	end
 end
 animationLoopTimer = timer.performWithDelay( 200, animationLoop, 0 )
+
+
+audio.reserveChannels( 1 )
+-- Reduce the overall volume of the channel
+audio.setVolume( 1, { channel=1 } )
+
+
+-- Load audio
+musicTrack = audio.loadStream( "audio/Tom.wav",system.ResourceDirectory)
+ 
+-- Play the background music on channel 1, loop infinitely 
+audio.play( musicTrack, { channel=1, loops=-1 } )
+ 
 --(done)
 --amigojapan> Zcom: primero muevo el esprite sobre el otro 
 --objecto(sin mostrarlo) luego si hay collision, consigo el 
