@@ -128,7 +128,7 @@ dresser_table5.myName = "Dresser Table slot 5"
 
 
 pickles_tray=display.newImage("img/pickles_tray.png", gridSize*11, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(pickles_tray,"pickles_tray")
+resizeObjectToGridSize(pickles_tray,"Pickles tray")
 cheese_tray=display.newImage("img/cheese_tray.png", gridSize*10, gridSize*2,gridSize,gridSize)
 resizeObjectToGridSize(cheese_tray,"cheese_tray")
 wrapper_yellow=display.newImage("img/wrapper_yellow.png", gridSize*9, gridSize*2,gridSize,gridSize)
@@ -198,6 +198,18 @@ rat.InMotion=false
 tom = display.newGroup()
 --tom=display.newImage("img/Tom.png", gridSize*10, gridSize*10,gridSize,gridSize)
 tomImg = display.newImageRect( tom, "img/Tom.png", gridSize, gridSize )
+tomWithPicklesImg = display.newImageRect( tom, "img/tom_with_pickles.png", gridSize, gridSize )
+tomWithPicklesImg.isVisible=false
+tomWithCheeseImg = display.newImageRect( tom, "img/tom_with_cheese.png", gridSize, gridSize )
+tomWithCheeseImg.isVisible=false
+tomWithRedWrapperImg = display.newImageRect( tom, "img/tom_with_red_wrapper.png", gridSize, gridSize )
+tomWithRedWrapperImg.isVisible=false
+tomWithYellowWrapperImg = display.newImageRect( tom, "img/tom_with_yellow_wrapper.png", gridSize, gridSize )
+tomWithYellowWrapperImg.isVisible=false
+tomWithBurgerImg = display.newImageRect( tom, "img/tom_with_burger.png", gridSize, gridSize )
+tomWithBurgerImg.isVisible=false
+tomWithCheeseBurgerImg = display.newImageRect( tom, "img/tom_with_cheese_burger.png", gridSize, gridSize )
+tomWithCheeseBurgerImg.isVisible=false
 tomWithBroomImg = display.newImageRect( tom, "img/Tom_with_broom_frame1.png", gridSize, gridSize )
 tomWithBroomImg.isVisible=false
 tomWithKetchupImg = display.newImageRect( tom, "img/tom_with_ketchup.png", gridSize, gridSize )
@@ -279,7 +291,7 @@ function mustardGrab(sprite)
 	end
 end
 function ketchupRetrun(sprite)
-	if  tomWithKetchupImg.isVisible and sprite.dresser_table_ketchupImg.isVisible==false and sprite.dresser_table_mustardImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
+	if  sprite.dresser_table_emptyImg.isVisible and tomWithKetchupImg.isVisible and sprite.dresser_table_ketchupImg.isVisible==false and sprite.dresser_table_mustardImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Returned Ketchup")
@@ -290,7 +302,7 @@ function ketchupRetrun(sprite)
 	end
 end
 function mustardRetrun(sprite)
-	if  tomWithBunsImg.isVisible==false and tomWithMustardImg.isVisible and sprite.dresser_table_mustardImg.isVisible==false and sprite.dresser_table_ketchupImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
+	if  sprite.dresser_table_emptyImg.isVisible and tomWithBunsImg.isVisible==false and tomWithMustardImg.isVisible and sprite.dresser_table_mustardImg.isVisible==false and sprite.dresser_table_ketchupImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Returned mustard")
@@ -349,6 +361,36 @@ function putMustardOnBunsWithKetchup(sprite)
 		sprite.dresser_table_buns_with_mustard.isVisible=true
 	end
 end
+function picklesGrabOrReturn(sprite)
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Piccle grabbed")
+		tomImg.isVisible = false
+		tomWithPicklesImg.isVisible=true
+	end
+	if tomWithPicklesImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Pickle grabbed")
+		tomImg.isVisible = true
+		tomWithPicklesImg.isVisible=false
+	end
+end
+function putPicklesOnBuns(sprite)
+	--print("sprite.dresser_table_emptyImg.isVisible:"..tostring(sprite.dresser_table_emptyImg.isVisible))
+	if  sprite.dresser_table_buns_with_mustard.isVisible and tomWithPicklesImg.isVisible and tom.waitingToGrabAgain==false then
+		--fix that you can put buns where mustard and ketchup are
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Put picles on buns")
+		tomImg.isVisible = true
+		tomWithPicklesImg.isVisible=false
+		
+		sprite.dresser_table_buns_with_pickles.isVisible=true
+		sprite.dresser_table_buns_with_mustard.isVisible=false
+	end
+end
 
 
 local function handleKitchenCollision(sprite)
@@ -389,6 +431,7 @@ local function handleKitchenCollision(sprite)
 	sprite.myName ==  "Dresser Table slot 5"
 	then
 		--order is important
+		putPicklesOnBuns(sprite)
 		putMustardOnBunsWithKetchup(sprite)
 		putKetchupOnBuns(sprite)
 		putBunsOnTable(sprite)
@@ -396,6 +439,9 @@ local function handleKitchenCollision(sprite)
 		ketchupRetrun(sprite)
 		mustardGrab(sprite)
 		mustardRetrun(sprite)
+	end
+	if sprite.myName == "Pickles tray" then
+		picklesGrabOrReturn(sprite)
 	end
 end
 

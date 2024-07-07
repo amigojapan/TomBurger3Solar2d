@@ -32,8 +32,73 @@ function resizeObjectToGridSize(object,objectName)
 	table.insert(kitchen, object)
 end
 
---block=display.newImage("img/block.png", gridSize*1, gridSize*1,gridSize,gridSize)
---resizeObjectToGridSize(block,"block")
+fridgeDoorPatties=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorPatties.width=gridSize
+fridgeDoorPatties.height=gridSize
+fridgeDoorPatties.x=gridSize*11
+fridgeDoorPatties.y=gridSize*10
+fridgeDoorPatties.isVisible=false
+fridgeDoorPatties.myName = "Fridge Door Patties"
+table.insert(kitchen, fridgeDoorPatties)
+fridgeDoorPattiesClose1=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorPattiesClose1.width=gridSize
+fridgeDoorPattiesClose1.height=gridSize
+fridgeDoorPattiesClose1.x=gridSize*11
+fridgeDoorPattiesClose1.y=gridSize*9
+fridgeDoorPattiesClose1.isVisible=false
+fridgeDoorPattiesClose1.myName = "Fridge Door Close"
+table.insert(kitchen, fridgeDoorPattiesClose1)
+fridgeDoorPattiesClose2=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorPattiesClose2.width=gridSize
+fridgeDoorPattiesClose2.height=gridSize
+fridgeDoorPattiesClose2.x=gridSize*10
+fridgeDoorPattiesClose2.y=gridSize*10
+fridgeDoorPattiesClose2.isVisible=false
+fridgeDoorPattiesClose2.myName = "Fridge Door Close"
+table.insert(kitchen, fridgeDoorPattiesClose2)
+fridgeDoorPattiesClose3=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorPattiesClose3.width=gridSize
+fridgeDoorPattiesClose3.height=gridSize
+fridgeDoorPattiesClose3.x=gridSize*12
+fridgeDoorPattiesClose3.y=gridSize*10
+fridgeDoorPattiesClose3.isVisible=false
+fridgeDoorPattiesClose3.myName = "Fridge Door Close"
+table.insert(kitchen, fridgeDoorPattiesClose3)
+
+
+fridgeDoorFries=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorFries.width=gridSize
+fridgeDoorFries.height=gridSize
+fridgeDoorFries.x=gridSize*2
+fridgeDoorFries.y=gridSize*6
+fridgeDoorFries.isVisible=false
+fridgeDoorFries.myName = "Fridge Door Fries"
+table.insert(kitchen, fridgeDoorFries)
+fridgeDoorFriesClose1=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorFriesClose1.width=gridSize
+fridgeDoorFriesClose1.height=gridSize
+fridgeDoorFriesClose1.x=gridSize*3
+fridgeDoorFriesClose1.y=gridSize*6
+fridgeDoorFriesClose1.isVisible=false
+fridgeDoorFriesClose1.myName = "Fridge Door Close"
+table.insert(kitchen, fridgeDoorFriesClose1)
+fridgeDoorFriesClose2=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorFriesClose2.width=gridSize
+fridgeDoorFriesClose2.height=gridSize
+fridgeDoorFriesClose2.x=gridSize*2
+fridgeDoorFriesClose2.y=gridSize*5
+fridgeDoorFriesClose2.isVisible=false
+fridgeDoorFriesClose2.myName = "Fridge Door Close"
+table.insert(kitchen, fridgeDoorFriesClose2)
+fridgeDoorFriesClose3=display.newImage("img/fridgeDoor.png", gridSize*1, gridSize*1,gridSize,gridSize)
+fridgeDoorFriesClose3.width=gridSize
+fridgeDoorFriesClose3.height=gridSize
+fridgeDoorFriesClose3.x=gridSize*2
+fridgeDoorFriesClose3.y=gridSize*7
+fridgeDoorFriesClose3.isVisible=false
+fridgeDoorFriesClose3.myName = "Fridge Door Close"
+table.insert(kitchen, fridgeDoorFriesClose3)
+
 block1=display.newImage("img/block.png", gridSize*1, gridSize*1,gridSize,gridSize)
 resizeObjectToGridSize(block1,"block")
 fries=display.newImage("img/fries_box_empty.png", gridSize*2, gridSize*2,gridSize,gridSize)
@@ -128,7 +193,7 @@ dresser_table5.myName = "Dresser Table slot 5"
 
 
 pickles_tray=display.newImage("img/pickles_tray.png", gridSize*11, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(pickles_tray,"pickles_tray")
+resizeObjectToGridSize(pickles_tray,"Pickles tray")
 cheese_tray=display.newImage("img/cheese_tray.png", gridSize*10, gridSize*2,gridSize,gridSize)
 resizeObjectToGridSize(cheese_tray,"cheese_tray")
 wrapper_yellow=display.newImage("img/wrapper_yellow.png", gridSize*9, gridSize*2,gridSize,gridSize)
@@ -198,6 +263,18 @@ rat.InMotion=false
 tom = display.newGroup()
 --tom=display.newImage("img/Tom.png", gridSize*10, gridSize*10,gridSize,gridSize)
 tomImg = display.newImageRect( tom, "img/Tom.png", gridSize, gridSize )
+tomWithPicklesImg = display.newImageRect( tom, "img/tom_with_pickles.png", gridSize, gridSize )
+tomWithPicklesImg.isVisible=false
+tomWithCheeseImg = display.newImageRect( tom, "img/tom_with_cheese.png", gridSize, gridSize )
+tomWithCheeseImg.isVisible=false
+tomWithRedWrapperImg = display.newImageRect( tom, "img/tom_with_red_wrapper.png", gridSize, gridSize )
+tomWithRedWrapperImg.isVisible=false
+tomWithYellowWrapperImg = display.newImageRect( tom, "img/tom_with_yellow_wrapper.png", gridSize, gridSize )
+tomWithYellowWrapperImg.isVisible=false
+tomWithBurgerImg = display.newImageRect( tom, "img/tom_with_burger.png", gridSize, gridSize )
+tomWithBurgerImg.isVisible=false
+tomWithCheeseBurgerImg = display.newImageRect( tom, "img/tom_with_cheese_burger.png", gridSize, gridSize )
+tomWithCheeseBurgerImg.isVisible=false
 tomWithBroomImg = display.newImageRect( tom, "img/Tom_with_broom_frame1.png", gridSize, gridSize )
 tomWithBroomImg.isVisible=false
 tomWithKetchupImg = display.newImageRect( tom, "img/tom_with_ketchup.png", gridSize, gridSize )
@@ -279,7 +356,7 @@ function mustardGrab(sprite)
 	end
 end
 function ketchupRetrun(sprite)
-	if  tomWithKetchupImg.isVisible and sprite.dresser_table_ketchupImg.isVisible==false and sprite.dresser_table_mustardImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
+	if  sprite.dresser_table_emptyImg.isVisible and tomWithKetchupImg.isVisible and sprite.dresser_table_ketchupImg.isVisible==false and sprite.dresser_table_mustardImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Returned Ketchup")
@@ -290,7 +367,7 @@ function ketchupRetrun(sprite)
 	end
 end
 function mustardRetrun(sprite)
-	if  tomWithBunsImg.isVisible==false and tomWithMustardImg.isVisible and sprite.dresser_table_mustardImg.isVisible==false and sprite.dresser_table_ketchupImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
+	if  sprite.dresser_table_emptyImg.isVisible and tomWithBunsImg.isVisible==false and tomWithMustardImg.isVisible and sprite.dresser_table_mustardImg.isVisible==false and sprite.dresser_table_ketchupImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Returned mustard")
@@ -349,9 +426,52 @@ function putMustardOnBunsWithKetchup(sprite)
 		sprite.dresser_table_buns_with_mustard.isVisible=true
 	end
 end
+function picklesGrabOrReturn(sprite)
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Piccle grabbed")
+		tomImg.isVisible = false
+		tomWithPicklesImg.isVisible=true
+	end
+	if tomWithPicklesImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Pickle grabbed")
+		tomImg.isVisible = true
+		tomWithPicklesImg.isVisible=false
+	end
+end
+function putPicklesOnBuns(sprite)
+	--print("sprite.dresser_table_emptyImg.isVisible:"..tostring(sprite.dresser_table_emptyImg.isVisible))
+	if  sprite.dresser_table_buns_with_mustard.isVisible and tomWithPicklesImg.isVisible and tom.waitingToGrabAgain==false then
+		--fix that you can put buns where mustard and ketchup are
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Put picles on buns")
+		tomImg.isVisible = true
+		tomWithPicklesImg.isVisible=false
+		
+		sprite.dresser_table_buns_with_pickles.isVisible=true
+		sprite.dresser_table_buns_with_mustard.isVisible=false
+	end
+end
 
 
 local function handleKitchenCollision(sprite)
+	if sprite.myName == "Fridge Door Fries" then
+		print("touches")
+		fridgeDoorFries.isVisible=true
+	end
+	if sprite.myName == "Fridge Door Patties" then
+		print("touches")
+		fridgeDoorPatties.isVisible=true
+	end
+	if sprite.myName == "Fridge Door Close" then
+		print("touches close")
+		fridgeDoorPatties.isVisible=false
+		fridgeDoorFries.isVisible=false
+	end
 	if sprite.myName == "Toaster" then
 		if tomWithBunsImg.isVisible then
 			return -- hack to avoid going thru the toaster with buns
@@ -389,6 +509,7 @@ local function handleKitchenCollision(sprite)
 	sprite.myName ==  "Dresser Table slot 5"
 	then
 		--order is important
+		putPicklesOnBuns(sprite)
 		putMustardOnBunsWithKetchup(sprite)
 		putKetchupOnBuns(sprite)
 		putBunsOnTable(sprite)
@@ -396,6 +517,9 @@ local function handleKitchenCollision(sprite)
 		ketchupRetrun(sprite)
 		mustardGrab(sprite)
 		mustardRetrun(sprite)
+	end
+	if sprite.myName == "Pickles tray" then
+		picklesGrabOrReturn(sprite)
 	end
 end
 
@@ -415,6 +539,7 @@ function onCompletecallback(obj)
 end
 
 function moveInDirection(dx, dy, direction, movingObject)
+
 	if movingObject.myName == "tom" and toaster.toaster_onImg.isVisible==true then
 		print("frozen while toasting")
 		return
@@ -422,11 +547,13 @@ function moveInDirection(dx, dy, direction, movingObject)
 	if movingObject.myName == "tom" then
 		--happens when tom moves
 		--print(tostring(movingObject.InMotion))
+
 	end
 	if movingObject.InMotion then
 		return
 	end
-	
+
+		
 	-- Calculate new position
 	local newX = movingObject.x + dx
 	local newY = movingObject.y + dy
@@ -453,13 +580,15 @@ function moveInDirection(dx, dy, direction, movingObject)
                 -- happens when tom moves
                 col.text = debugVersion .. "collision:true kitchen object:"..sprite.myName
                 handleKitchenCollision(sprite)
-				if (tom.holdingBroom  and  sprite.myName=="broom") then
+				if ((tom.holdingBroom  and  sprite.myName=="broom") or sprite.myName=="Fridge Door Fries" or sprite.myName=="Fridge Door Patties" or sprite.myName=="Fridge Door Close") then
 					--make kitchen object non solid
 					collided=false
 					break	
 				end
             end
 			collided = true
+		else
+			--fridgeDoorPatties.isVisible=false
         end
     end
 
@@ -495,7 +624,7 @@ function moveInDirection(dx, dy, direction, movingObject)
 		transition.to(movingObject, {time = timeForMoveInMilliseconds, y = movingObject.y - gridSize, onComplete = onCompletecallback})
 	elseif direction == "down" and not collided then
 		transition.to(movingObject, {time = timeForMoveInMilliseconds, y = movingObject.y + gridSize, onComplete = onCompletecallback})
-	end
+	end	
 	collided=false
 end
 
