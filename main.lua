@@ -1,5 +1,5 @@
 --constarts
-debugVersion="       debugVerion 1,"
+debugVersion="       debugVerion 5,"
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
@@ -121,7 +121,7 @@ resizeObjectToGridSize(register,"block")
 sekino=display.newImage("img/sekino.png", gridSize*6, gridSize*2,gridSize,gridSize)
 resizeObjectToGridSize(sekino,"block")
 orders_tray=display.newImage("img/orders_tray.png", gridSize*5, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(orders_tray,"block")
+resizeObjectToGridSize(orders_tray,"Orders Tray")
 orders_spindle=display.newImage("img/orders_spindle.png", gridSize*5, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(orders_spindle,"orders_spindle")
 fry_scale_empty=display.newImage("img/fry_scale_empty.png", gridSize*5, gridSize*4,gridSize,gridSize)
@@ -154,6 +154,41 @@ function dresserTablePrepareObj(x,y)
 	table.insert(kitchen, obj)
 	return obj
 end
+function griddleSlotPrepareObj(x,y)
+	obj = display.newGroup()
+	obj.griddle_slot_emptyImg = display.newImageRect(obj, "img/teppan_empty.png", gridSize, gridSize )
+	obj.griddle_slot_raw_frame1Img = display.newImageRect(obj, "img/teppan_patty_raw_frame1.png", gridSize, gridSize )
+	obj.griddle_slot_raw_frame2Img = display.newImageRect(obj, "img/teppan_patty_raw_frame2.png", gridSize, gridSize )
+	obj.griddle_slot_cooked_frame1Img = display.newImageRect(obj, "img/teppan_patty_cooked_frame1.png", gridSize, gridSize )
+	obj.griddle_slot_cooked_frame2Img = display.newImageRect(obj, "img/teppan_patty_cooked_frame2.png", gridSize, gridSize )
+	obj.griddle_slot_burnt_frame1Img = display.newImageRect(obj, "img/teppan_patty_burnt1.png", gridSize, gridSize )
+	obj.griddle_slot_burnt_frame2Img = display.newImageRect(obj, "img/teppan_patty_burnt2.png", gridSize, gridSize )
+	obj.griddle_slot_emptyImg.isVisible=true
+	obj.griddle_slot_raw_frame1Img.isVisible=false
+	obj.griddle_slot_raw_frame2Img.isVisible=false
+	obj.griddle_slot_cooked_frame1Img.isVisible=false
+	obj.griddle_slot_cooked_frame2Img.isVisible=false
+	obj.griddle_slot_burnt_frame1Img.isVisible=false
+	obj.griddle_slot_burnt_frame2Img.isVisible=false
+	obj.x = x
+	obj.y = y	
+	obj.width=gridSize
+	obj.height=gridSize
+	obj.state="empty"
+	obj.pattyFlipped=false
+	table.insert(kitchen, obj)
+	return obj
+end
+
+griddle_slot1 = griddleSlotPrepareObj(gridSize*1,gridSize*7)
+griddle_slot1.myName = "Griddle slot"
+griddle_slot2 = griddleSlotPrepareObj(gridSize*1,gridSize*8)
+griddle_slot2.myName = "Griddle slot"
+griddle_slot3 = griddleSlotPrepareObj(gridSize*1,gridSize*9)
+griddle_slot3.myName = "Griddle slot"
+griddle_slot4 = griddleSlotPrepareObj(gridSize*1,gridSize*10)
+griddle_slot4.myName = "Griddle slot"
+
 
 dresser_table1 = dresserTablePrepareObj(gridSize*7,gridSize*4)
 dresser_table1.dresser_table_buns.isVisible=false
@@ -195,12 +230,13 @@ dresser_table5.myName = "Dresser Table slot 5"
 pickles_tray=display.newImage("img/pickles_tray.png", gridSize*11, gridSize*2,gridSize,gridSize)
 resizeObjectToGridSize(pickles_tray,"Pickles tray")
 cheese_tray=display.newImage("img/cheese_tray.png", gridSize*10, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(cheese_tray,"cheese_tray")
+resizeObjectToGridSize(cheese_tray,"Cheese tray")
 wrapper_yellow=display.newImage("img/wrapper_yellow.png", gridSize*9, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(wrapper_yellow,"wrapper_yellow")
+resizeObjectToGridSize(wrapper_yellow,"Yellow wrapper tray")
 wrapper_red=display.newImage("img/wrapper_red.png", gridSize*8, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(wrapper_red,"wrapper_red")
+resizeObjectToGridSize(wrapper_red,"Red wrapper tray")
 --teppan
+--[[
 teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*7,gridSize,gridSize)
 resizeObjectToGridSize(teppan_empty,"teppan_empty")
 teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*8,gridSize,gridSize)
@@ -209,11 +245,16 @@ teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*9,gri
 resizeObjectToGridSize(teppan_empty,"teppan_empty")
 teppan_empty=display.newImage("img/teppan_empty.png", gridSize*1, gridSize*10,gridSize,gridSize)
 resizeObjectToGridSize(teppan_empty,"teppan_empty")
-spatchula_tray_with_spatchula=display.newImage("img/spatchula_tray_with_spatchula_rotated.png", gridSize*1, gridSize*11,gridSize,gridSize)
-resizeObjectToGridSize(spatchula_tray_with_spatchula,"spatchula_tray_with_spatchula")
+]]
+spatchula_tray_without_spatchula=display.newImage("img/fridge.png", gridSize*1, gridSize*11,gridSize,gridSize)
+resizeObjectToGridSize(spatchula_tray_without_spatchula,"Spatchula tray with spatchula")
+spatchula_tray_without_spatchula.isVisible=false
+spatulaTray=display.newImage("img/spatchula_tray_with_spatchula_rotated.png", gridSize*1, gridSize*11,gridSize,gridSize)
+resizeObjectToGridSize(spatulaTray,"Spatchula tray")
+
 --lower items
 fridge2=display.newImage("img/fridge.png", gridSize*11, gridSize*11,gridSize,gridSize)
-resizeObjectToGridSize(fridge2,"fridge2")
+resizeObjectToGridSize(fridge2,"Fridge for Patties")
 
 --toaster_off=display.newImage("img/toaster_off.png", gridSize*8, gridSize*11,gridSize,gridSize)
 --resizeObjectToGridSize(toaster_off,"toaster_off")
@@ -285,6 +326,19 @@ tomWaitingBunsImg = display.newImageRect( tom, "img/tom_wating_buns.png", gridSi
 tomWaitingBunsImg.isVisible=false
 tomWithBunsImg = display.newImageRect( tom, "img/tom_with_buns.png", gridSize, gridSize )
 tomWithBunsImg.isVisible=false
+tomWithPattyImg = display.newImageRect( tom, "img/tom_with_patty.png", gridSize, gridSize )
+tomWithPattyImg.isVisible=false
+tomWithSpatula=false
+tomWithSpatulaLeftImg = display.newImageRect( tom, "img/tom_with_spatula_left.png", gridSize, gridSize )
+tomWithSpatulaLeftImg.isVisible=false
+tomWithSpatulaCookedPatty=false
+tomWithSpatulaCookedPattyLeftImg = display.newImageRect( tom, "img/tom_with_spatula_cooked_patty_left.png", gridSize, gridSize )
+tomWithSpatulaCookedPattyLeftImg.isVisible=false
+tomWithWrappedBurgerImg = display.newImageRect( tom, "img/tom_with_burger.png", gridSize, gridSize )
+tomWithWrappedBurgerImg.isVisible=false
+tomWithWrappedCheeseBurgerImg = display.newImageRect( tom, "img/tom_with_cheese_burger.png", gridSize, gridSize )
+tomWithWrappedCheeseBurgerImg.isVisible=false
+
 tom.x = gridSize*10
 tom.y = gridSize*10
 tom.width=gridSize
@@ -344,6 +398,29 @@ function ketchupGrab(sprite)
 		sprite.dresser_table_ketchupImg.isVisible=false
 	end
 end
+function wrapAndGrabBurger(sprite)
+	if tomWithRedWrapperImg.isVisible and sprite.dresser_table_burger.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Wrapped and grabbed burger")
+		tomWithRedWrapperImg.isVisible = false
+		tomWithWrappedBurgerImg.isVisible=true
+		sprite.dresser_table_emptyImg.isVisible=true
+		sprite.dresser_table_burger.isVisible=false
+	end
+end
+function wrapAndGrabCheeseBurger(sprite)
+	if tomWithYellowWrapperImg.isVisible and sprite.dresser_table_cheese_burger.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Wrapped and grabbed burger")
+		tomWithYellowWrapperImg.isVisible = false
+		tomWithWrappedCheeseBurgerImg.isVisible=true
+		sprite.dresser_table_emptyImg.isVisible=true
+		sprite.dresser_table_cheese_burger.isVisible=false
+	end
+end
+
 function mustardGrab(sprite)
 	if tomWithBunsImg.isVisible==false and tomWithMustardImg.isVisible==false and sprite.dresser_table_mustardImg.isVisible and tomWithKetchupImg.isVisible==false and tom.holdingBroom==false and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
@@ -403,9 +480,7 @@ function putBunsOnTable(sprite)
 	end
 end
 function putKetchupOnBuns(sprite)
-	--print("sprite.dresser_table_emptyImg.isVisible:"..tostring(sprite.dresser_table_emptyImg.isVisible))
 	if  sprite.dresser_table_buns.isVisible and tomWithKetchupImg.isVisible and tom.waitingToGrabAgain==false then
-		--fix that you can put buns where mustard adn ketchup are
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Put ketchup on buns")
@@ -437,7 +512,7 @@ function picklesGrabOrReturn(sprite)
 	if tomWithPicklesImg.isVisible and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
-		print("Pickle grabbed")
+		print("Pickle returned")
 		tomImg.isVisible = true
 		tomWithPicklesImg.isVisible=false
 	end
@@ -456,12 +531,253 @@ function putPicklesOnBuns(sprite)
 		sprite.dresser_table_buns_with_mustard.isVisible=false
 	end
 end
+function pattyGrabOrReturn(sprite)--from patty fridge
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Patty grabbed")
+		tomImg.isVisible=false
+		tomWithPattyImg.isVisible=true	end
+	if tomWithPattyImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Patty returned")
+		tomImg.isVisible=true
+		tomWithPattyImg.isVisible=false	
+	end
+end
+function pattyGrabFromGriddle(sprite)
+	if tomWithSpatulaLeftImg.isVisible and (sprite.state=="cooked" or sprite.state=="burnt") and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		if sprite.pattyFlipped==false then
+			print("Patty flipped")
+			sprite.state="raw"
+			sprite.griddle_slot_cooked_frame1Img.isVisible=false
+			sprite.griddle_slot_cooked_frame2Img.isVisible=false
+			sprite.griddle_slot_burnt_frame1Img.isVisible=false
+			sprite.griddle_slot_burnt_frame2Img.isVisible=false
+			sprite.griddle_slot_raw_frame1Img.isVisible=true
+			sprite.pattyFlipped=true
+		else
+			tomWithSpatulaLeftImg.isVisible = false
+			tomWithSpatulaCookedPattyLeftImg.isVisible=true
+			sprite.state="empty"
+			sprite.griddle_slot_cooked_frame1Img.isVisible=false
+			sprite.griddle_slot_cooked_frame2Img.isVisible=false
+			sprite.griddle_slot_burnt_frame1Img.isVisible=false
+			sprite.griddle_slot_burnt_frame2Img.isVisible=false
+			sprite.griddle_slot_raw_frame1Img.isVisible=false
+			sprite.griddle_slot_raw_frame2Img.isVisible=false
+			sprite.griddle_slot_emptyImg.isVisible=true
+			sprite.pattyFlipped=false
+		end
+	end
+end
+function pattyPutOnDresserTable(sprite)
+	if  sprite.dresser_table_buns_with_pickles.isVisible and tomWithSpatulaCookedPattyLeftImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Regular burger complete")
+		tomWithSpatulaLeftImg.isVisible=true
+		tomWithSpatulaCookedPattyLeftImg.isVisible=false
+		sprite.dresser_table_buns_with_pickles.isVisible=false
+		sprite.dresser_table_burger.isVisible=true
+	end
+end
+function putCheeseOnBuns(sprite)
+	if sprite.dresser_table_burger.isVisible and tomWithCheeseImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Cheese grabbed")
+		tomImg.isVisible = true
+		tomWithCheeseImg.isVisible=false
+		sprite.dresser_table_burger.isVisible=false
+		sprite.dresser_table_cheese_burger.isVisible=true
+	end
+end
+function cheeseGrabOrReturn(sprite)
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Piccle grabbed")
+		tomImg.isVisible = false
+		tomWithCheeseImg.isVisible=true
+	end
+	if tomWithCheeseImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Pickle returned")
+		tomImg.isVisible = true
+		tomWithCheeseImg.isVisible=false
+	end
+end
+
+ordersTray={}
+ordersTray.burgersMade=0
+ordersTray.cheeseBurgersMade=0
+function putBurgerInOrdersTray(sprite)
+	if  tomWithWrappedBurgerImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("One burger ready!")
+		tomImg.isVisible = true
+		tomWithWrappedBurgerImg.isVisible=false
+		ordersTray.burgersMade=ordersTray.burgersMade+1
+	end
+end
+function putCheeseBurgerInOrdersTray(sprite)
+	if  tomWithWrappedCheeseBurgerImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("One cheese burger ready!")
+		tomImg.isVisible = true
+		tomWithWrappedCheeseBurgerImg.isVisible=false
+		ordersTray.cheeseBurgersMade=ordersTray.cheeseBurgersMade+1
+	end
+end
+
+function cookedEvent1()
+	if griddle_slot1.state=="raw" then 
+		griddle_slot1.state="cooked"
+		griddle_slot1.griddle_slot_raw_frame1Img.isVisible=false
+		griddle_slot1.griddle_slot_raw_frame2Img.isVisible=false
+		griddle_slot1.griddle_slot_cooked_frame1Img.isVisible=true
+	elseif griddle_slot1.state=="cooked" then 
+		griddle_slot1.state="burnt"
+		griddle_slot1.griddle_slot_cooked_frame1Img.isVisible=false
+		griddle_slot1.griddle_slot_cooked_frame2Img.isVisible=false
+		griddle_slot1.griddle_slot_burnt_frame1Img.isVisible=true
+	end
+end
+function cookedEvent2()
+	if griddle_slot2.state=="raw" then 
+		griddle_slot2.state="cooked"
+		griddle_slot2.griddle_slot_raw_frame1Img.isVisible=false
+		griddle_slot2.griddle_slot_raw_frame2Img.isVisible=false
+		griddle_slot2.griddle_slot_cooked_frame1Img.isVisible=true
+	elseif griddle_slot2.state=="cooked" then 
+		griddle_slot2.state="burnt"
+		griddle_slot2.griddle_slot_cooked_frame1Img.isVisible=false
+		griddle_slot2.griddle_slot_cooked_frame2Img.isVisible=false
+		griddle_slot2.griddle_slot_burnt_frame1Img.isVisible=true
+	end
+end
+function cookedEvent3()
+	if griddle_slot3.state=="raw" then 
+		griddle_slot3.state="cooked"
+		griddle_slot3.griddle_slot_raw_frame1Img.isVisible=false
+		griddle_slot3.griddle_slot_raw_frame2Img.isVisible=false
+		griddle_slot3.griddle_slot_cooked_frame1Img.isVisible=true
+	elseif griddle_slot3.state=="cooked" then 
+		griddle_slot3.state="burnt"
+		griddle_slot3.griddle_slot_cooked_frame1Img.isVisible=false
+		griddle_slot3.griddle_slot_cooked_frame2Img.isVisible=false
+		griddle_slot3.griddle_slot_burnt_frame1Img.isVisible=true
+	end
+
+end
+function cookedEvent4()
+	if griddle_slot4.state=="raw" then 
+		griddle_slot4.state="cooked"
+		griddle_slot4.griddle_slot_raw_frame1Img.isVisible=false
+		griddle_slot4.griddle_slot_raw_frame2Img.isVisible=false
+		griddle_slot4.griddle_slot_cooked_frame1Img.isVisible=true
+	elseif griddle_slot4.state=="cooked" then 
+		griddle_slot4.state="burnt"
+		griddle_slot4.griddle_slot_cooked_frame1Img.isVisible=false
+		griddle_slot4.griddle_slot_cooked_frame2Img.isVisible=false
+		griddle_slot4.griddle_slot_burnt_frame1Img.isVisible=true
+	end
+end
+function spatulaGrabOrReturn(sprite)
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Spatula grabbed")
+		tomImg.isVisible=false
+		tomWithSpatulaLeftImg.isVisible=true
+		spatulaTray.isVisible=false
+		spatchula_tray_without_spatchula.isVisible=true
+	elseif tomWithSpatulaLeftImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Spatula returned")
+		tomImg.isVisible=true
+		tomWithSpatulaLeftImg.isVisible=false
+		spatchula_tray_without_spatchula.isVisible=false
+		spatulaTray.isVisible=true
+	end
+end
+function redWrapperGrabOrReturn(sprite)
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Spatula grabbed")
+		tomImg.isVisible=false
+		tomWithRedWrapperImg.isVisible=true
+	elseif tomWithRedWrapperImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Spatula returned")
+		tomImg.isVisible=true
+		tomWithRedWrapperImg.isVisible=false
+	end
+end
+function yellowWrapperGrabOrReturn(sprite)
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Spatula grabbed")
+		tomImg.isVisible=false
+		tomWithYellowWrapperImg.isVisible=true
+	elseif tomWithYellowWrapperImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Spatula returned")
+		tomImg.isVisible=true
+		tomWithYellowWrapperImg.isVisible=false
+	end
+end
+
+local cookedTimer1
+local cookedTimer2
+local cookedTimer3
+local cookedTimer4
+function putPattyOnGriddle(sprite)
+	if  sprite.griddle_slot_emptyImg.isVisible and tomImg.isVisible==false and tomWithPattyImg.isVisible and tom.waitingToGrabAgain==false then
+		--fix that you can put buns where mustard adn ketchup are
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Put patty on griddle")
+		tomImg.isVisible = true
+		tomWithPattyImg.isVisible=false
+		sprite.griddle_slot_emptyImg.isVisible=false
+		sprite.griddle_slot_raw_frame1Img.isVisible=true
+		sprite.state="raw"
+		if sprite==griddle_slot1 then
+			cookedTimer1=timer.performWithDelay(15000, cookedEvent1, 0 )
+		end
+		if sprite==griddle_slot2 then
+			cookedTimer2=timer.performWithDelay(15000, cookedEvent2, 0 )
+		end
+		if sprite==griddle_slot3 then
+			cookedTimer3=timer.performWithDelay(15000, cookedEvent3, 0 )
+		end
+		if sprite==griddle_slot4 then
+			cookedTimer4=timer.performWithDelay(15000, cookedEvent4, 0 )
+		end
+	end
+end
 
 
 local function handleKitchenCollision(sprite)
 	if sprite.myName == "Fridge Door Fries" then
 		print("touches")
 		fridgeDoorFries.isVisible=true
+	end
+	if sprite.myName == "Fridge for Patties" then
+		pattyGrabOrReturn(sprite)
 	end
 	if sprite.myName == "Fridge Door Patties" then
 		print("touches")
@@ -485,8 +801,19 @@ local function handleKitchenCollision(sprite)
 		tom.holdingBroom=true
 	end
 	if sprite.myName ==  "trash_can" then
+		if tomWithSpatulaCookedPattyLeftImg.isVisible then
+			tomWithSpatulaCookedPattyLeftImg.isVisible=false
+			tomWithSpatulaLeftImg.isVisible=true
+			tomImg.isVisible=false
+			return			
+		end
 		if tomWithBunsImg.isVisible then
 			tomWithBunsImg.isVisible=false
+			tomImg.isVisible=true
+			return
+		end
+		if tomWithPattyImg.isVisible then
+			tomWithPattyImg.isVisible=false
 			tomImg.isVisible=true
 			return
 		end
@@ -508,7 +835,11 @@ local function handleKitchenCollision(sprite)
 	or
 	sprite.myName ==  "Dresser Table slot 5"
 	then
-		--order is important
+		--order is important(in reverse order it seems)
+		wrapAndGrabCheeseBurger(sprite)
+		wrapAndGrabBurger(sprite)
+		putCheeseOnBuns(sprite)
+		pattyPutOnDresserTable(sprite)
 		putPicklesOnBuns(sprite)
 		putMustardOnBunsWithKetchup(sprite)
 		putKetchupOnBuns(sprite)
@@ -518,8 +849,28 @@ local function handleKitchenCollision(sprite)
 		mustardGrab(sprite)
 		mustardRetrun(sprite)
 	end
+	if sprite.myName == "Orders Tray" then
+		putBurgerInOrdersTray(sprite)
+		putCheeseBurgerInOrdersTray(sprite)
+	end
+	if sprite.myName == "Red wrapper tray" then
+		redWrapperGrabOrReturn(sprite)
+	end
+	if sprite.myName == "Yellow wrapper tray" then
+		yellowWrapperGrabOrReturn(sprite)
+	end
 	if sprite.myName == "Pickles tray" then
 		picklesGrabOrReturn(sprite)
+	end
+	if sprite.myName == "Cheese tray" then
+		cheeseGrabOrReturn(sprite)
+	end
+	if sprite.myName ==  "Griddle slot" then
+		putPattyOnGriddle(sprite)
+		pattyGrabFromGriddle(sprite)
+	end
+	if sprite.myName ==  "Spatchula tray" then
+		spatulaGrabOrReturn(sprite)
 	end
 end
 
@@ -827,7 +1178,39 @@ end
 poopTimer = timer.performWithDelay( 50000, poop, 0 )
 
 local animationLoopTimer
+
+function animateGriddle(obj)
+	if obj.state=="raw"	then
+		if obj.griddle_slot_raw_frame1Img.isVisible then
+			obj.griddle_slot_raw_frame1Img.isVisible=false
+			obj.griddle_slot_raw_frame2Img.isVisible=true
+		else
+			obj.griddle_slot_raw_frame1Img.isVisible=true
+			obj.griddle_slot_raw_frame2Img.isVisible=false				
+		end
+	elseif	obj.state=="cooked"	then
+		if obj.griddle_slot_cooked_frame1Img.isVisible then
+			obj.griddle_slot_cooked_frame1Img.isVisible=false
+			obj.griddle_slot_cooked_frame2Img.isVisible=true
+		else
+			obj.griddle_slot_cooked_frame1Img.isVisible=true
+			obj.griddle_slot_cooked_frame2Img.isVisible=false				
+		end
+	elseif	obj.state=="burnt"	then
+		if obj.griddle_slot_burnt_frame1Img.isVisible then
+			obj.griddle_slot_burnt_frame1Img.isVisible=false
+			obj.griddle_slot_burnt_frame2Img.isVisible=true
+		else
+			obj.griddle_slot_burnt_frame1Img.isVisible=true
+			obj.griddle_slot_burnt_frame2Img.isVisible=false				
+		end
+	end
+end
 function animationLoop()
+	animateGriddle(griddle_slot1)
+	animateGriddle(griddle_slot2)
+	animateGriddle(griddle_slot3)
+	animateGriddle(griddle_slot4)
 	for key, sprite in pairs(poops) do
 		if(sprite.isVisible) then
 			if(sprite.poop_frame1.isVisible) then
