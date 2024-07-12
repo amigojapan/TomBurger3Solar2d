@@ -102,8 +102,24 @@ table.insert(kitchen, fridgeDoorFriesClose3)
 block1=display.newImage("img/block.png", gridSize*1, gridSize*1,gridSize,gridSize)
 resizeObjectToGridSize(block1,"block"
 )
-fries=display.newImage("img/fries_box_empty.png", gridSize*2, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(fries,"block")
+
+fries_box_1=display.newImage("img/fries_box_fries1.png", gridSize*2, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(fries_box_1,"Fries box")
+fries_box_2=display.newImage("img/fries_box_fries2.png", gridSize*2, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(fries_box_2,"Fries box")
+fries_box_3=display.newImage("img/fries_box_fries3.png", gridSize*2, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(fries_box_3,"Fries box")
+fries_box_4=display.newImage("img/fries_box_fries4.png", gridSize*2, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(fries_box_4,"Fries box")
+fries_box_5=display.newImage("img/fries_box_fries5.png", gridSize*2, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(fries_box_5,"Fries box")
+fries_box_1.isVisible=false
+fries_box_2.isVisible=false
+fries_box_3.isVisible=false
+fries_box_4.isVisible=false
+fries_box_5.isVisible=false
+fries_box_empty=display.newImage("img/fries_box_empty.png", gridSize*2, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(fries_box_empty,"Fries box")
 --add colored fries counters
 fryer1_with_fries=display.newImage("img/fryer_with_fries.png", gridSize*2, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(fryer1_with_fries,"block")
@@ -116,8 +132,10 @@ resizeObjectToGridSize(fryer2_empty,"Fryer 2")
 
 timer1_on=display.newImage("img/fryer_timer_ready.png", gridSize*1, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(timer1_on,"timer1")
+timer1_on.isVisible=false
 timer2_on=display.newImage("img/fryer_timer_ready.png", gridSize*1, gridSize*4,gridSize,gridSize)
 resizeObjectToGridSize(timer2_on,"timer2")
+timer1_on.isVisible=false
 timer1_off=display.newImage("img/fryer_timer_off.png", gridSize*1, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(timer1_off,"timer1")
 timer2_off=display.newImage("img/fryer_timer_off.png", gridSize*1, gridSize*4,gridSize,gridSize)
@@ -125,14 +143,19 @@ resizeObjectToGridSize(timer2_off,"timer2")
 
 timer1_counter1=display.newImage("img/fryer_timer_counting1.png", gridSize*1, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(timer1_counter1,"timer1")
-timer1_counter2=display.newImage("img/fryer_timer_counting2.png", gridSize*1, gridSize*4,gridSize,gridSize)
+timer1_counter1.isVisible=false
+timer1_counter2=display.newImage("img/fryer_timer_counting2.png", gridSize*1, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(timer1_counter2,"timer2")
-timer2_counter1=display.newImage("img/fryer_timer_counting1.png", gridSize*1, gridSize*3,gridSize,gridSize)
+timer1_counter2.isVisible=false
+timer2_counter1=display.newImage("img/fryer_timer_counting1.png", gridSize*1, gridSize*4,gridSize,gridSize)
 resizeObjectToGridSize(timer2_counter1,"timer1")
+timer2_counter1.isVisible=false
 timer2_counter2=display.newImage("img/fryer_timer_counting2.png", gridSize*1, gridSize*4,gridSize,gridSize)
 resizeObjectToGridSize(timer2_counter2,"timer2")
+timer2_counter2.isVisible=false
 timer1_state="off"
 timer2_state="off"
+
 block2=display.newImage("img/block.png", gridSize*1, gridSize*5,gridSize,gridSize)
 resizeObjectToGridSize(block2,"block")
 fridge1=display.newImage("img/fridge.png", gridSize*1, gridSize*6,gridSize,gridSize)
@@ -387,7 +410,10 @@ tomWithFriesMesuringCupWithFriesImg = display.newImageRect( tom, "img/tom_with_m
 tomWithFriesMesuringCupWithFriesImg.isVisible=false
 tomWithFriesMesuringCupWithoughtFriesImg = display.newImageRect( tom, "img/tom_with_mesuring_bowl.png", gridSize, gridSize )
 tomWithFriesMesuringCupWithoughtFriesImg.isVisible=false
-
+tomWithFriesBasketFullImg = display.newImageRect( tom, "img/tom_with_fryer_spool_and_fries_left.png", gridSize, gridSize )
+tomWithFriesBasketFullImg.isVisible=false
+tomWithFriesBasketEmptyImg = display.newImageRect( tom, "img/tom_with_fryer_spool_withought_fries_left.png", gridSize, gridSize )
+tomWithFriesBasketEmptyImg.isVisible=false
 tom.x = gridSize*10
 tom.y = gridSize*10
 tom.width=gridSize
@@ -722,7 +748,6 @@ function friesMesure(sprite)--from fries fridge
 		end
 	end
 end
-
 function friesCupGrabOrReturn(sprite)
 	--grab
 	if tomImg.isVisible and tom.waitingToGrabAgain==false then
@@ -792,35 +817,107 @@ function friesCupGrabOrReturn(sprite)
 		end	
 	end
 end
+fryer1_with_fries_ammount="0G"
+fryer2_with_fries_ammount="0G"
+local fryer1Timer
+local fryer2Timer
+function helperPutFriesInFryer(sprite)
+	tomWithFriesMesuringCupWithFriesImg.isVisible=false
+	tomWithFriesMesuringCupWithoughtFriesImg.isVisible=true
+	if sprite==fryer1_empty then
+		fryer1_empty.isVisible=false
+		fryer1_with_fries.isVisible=true
+		fryer1_with_fries_ammount=friesMesurignCupAmmount
+		fryer1Timer=timer.performWithDelay(15000, fryer1DoneEvent, 0 )
+		timer1_state="frying"
+		--print("Fryer 1 frying")
+		timer1_off.isVisible=false
+		timer1_on.isVisible=false
+		timer1_counter1.isVisible=true
+	end
+	if sprite==fryer2_empty then
+		fryer2_empty.isVisible=false
+		fryer2_with_fries.isVisible=true
+		fryer2_with_fries_ammount=friesMesurignCupAmmount
+		fryer2Timer=timer.performWithDelay(15000, fryer2DoneEvent, 0 )
+		timer2_state="frying"
+		--print("Fryer 2 frying")
+		timer2_off.isVisible=false
+		timer2_on.isVisible=false
+		timer2_counter1.isVisible=true
+	end
+	friesMesurignCupAmmount="0G"
+end
 function friesPutInFryer(sprite)
 	if tomWithFriesMesuringCupWithFriesImg.isVisible and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		if friesMesurignCupAmmount=="100G" then
-			tomWithFriesMesuringCupWithFriesImg.isVisible=false
-			tomWithFriesMesuringCupWithoughtFriesImg.isVisible=true
-			tomImg.isVisible=true
-			if sprite==fryer1 then
-				frier1.isVisible=false
-				
-			end
-			friesMesurignCupAmmount="0G"
+			helperPutFriesInFryer(sprite)
 			print("Put 100g fries in fryer")					
 		elseif friesMesurignCupAmmount=="200G" then
-			fry_scale_no_lid.isVisible=false
-			fry_scale_200g.isVisible=true
-			tomWithFriesMesuringCupWithFriesImg.isVisible=false
-			tomImg.isVisible=true
-			friesMesurignCupAmmount="0G"
-			print("Returned 200g cup")					
+			helperPutFriesInFryer(sprite)
+			print("Put 200g fries in fryer")					
 		elseif friesMesurignCupAmmount=="300G" then
-			fry_scale_no_lid.isVisible=false
-			fry_scale_300g.isVisible=true
-			tomWithFriesMesuringCupWithFriesImg.isVisible=false
-			tomImg.isVisible=true
-			friesMesurignCupAmmount="0G"
-			print("Returned 300g cup")					
+			helperPutFriesInFryer(sprite)
+			print("Put 300g fries in fryer")					
 		end
+	end
+end
+friesInHand="0G"
+function friesTakeFromFryer(sprite)
+	if tomImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		if sprite==fryer1_empty and timer1_state=="done" and fryer1_with_fries.isVisible then
+			fryer1_empty.isVisible=true
+			fryer1_with_fries.isVisible=false
+			friesInHand=fryer1_with_fries_ammount
+			fryer1_with_fries_ammount="0G"
+			timer1_state="off"
+			print("Took fries barket 1 ".. friesInHand)
+			timer1_off.isVisible=true
+			timer1_on.isVisible=false
+			timer1_counter1.isVisible=false
+			timer1_counter2.isVisible=false
+			tomImg.isVisible=false
+			tomWithFriesBasketFullImg.isVisible=true	
+		end
+		if sprite==fryer2_empty and timer2_state=="done" and fryer2_with_fries.isVisible then
+			fryer2_empty.isVisible=true
+			fryer2_with_fries.isVisible=false
+			friesInHand=fryer2_with_fries_ammount
+			fryer2_with_fries_ammount="0G"
+			timer2_state="off"
+			print("Took fries barket 2 ".. friesInHand)
+			timer2_off.isVisible=true
+			timer2_on.isVisible=false
+			timer2_counter1.isVisible=false
+			timer2_counter2.isVisible=false
+			tomImg.isVisible=false
+			tomWithFriesBasketFullImg.isVisible=true
+	
+		end
+	end
+end
+function fryer1DoneEvent()
+	if timer1_state=="frying" then 
+		timer1_state="done"
+		timer1_off.isVisible=false
+		timer1_on.isVisible=true
+		timer1_counter1.isVisible=false
+		timer1_counter2.isVisible=false
+	elseif timer1_state=="done" then 
+	end
+end
+function fryer2DoneEvent()
+	if timer2_state=="frying" then 
+		timer2_state="done"
+		timer2_off.isVisible=false
+		timer2_on.isVisible=true
+		timer2_counter1.isVisible=false
+		timer2_counter2.isVisible=false
+	elseif timer2_state=="done" then 
 	end
 end
 
@@ -956,7 +1053,53 @@ function putPattyOnGriddle(sprite)
 		end
 	end
 end
-
+function updateFriesBox()
+	friesBoxEmptyBox()
+	if readyFriesAmmountInGrams >= 500 then
+		fries_box_empty.isVisible=false
+		fries_box_5.isVisible=true
+	elseif readyFriesAmmountInGrams == 400 then
+		fries_box_empty.isVisible=false
+		fries_box_4.isVisible=true
+	elseif readyFriesAmmountInGrams == 300 then
+		fries_box_empty.isVisible=false
+		fries_box_3.isVisible=true
+	elseif readyFriesAmmountInGrams == 200 then
+		fries_box_empty.isVisible=false
+		fries_box_2.isVisible=true
+	elseif readyFriesAmmountInGrams == 100 then
+		fries_box_empty.isVisible=false
+		fries_box_1.isVisible=true
+	elseif readyFriesAmmountInGrams == 0 then
+		fries_box_empty.isVisible=true
+	end
+end
+function friesBoxEmptyBox()
+	fries_box_empty.isVisible=true
+	fries_box_1.isVisible=false
+	fries_box_2.isVisible=false
+	fries_box_3.isVisible=false
+	fries_box_4.isVisible=false
+	fries_box_5.isVisible=false
+end
+readyFriesAmmountInGrams=0
+function putFriesInFriesBox(sprite)
+	if tomWithFriesBasketFullImg.isVisible and tom.waitingToGrabAgain==false then
+		tom.waitingToGrabAgain=true
+		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
+		print("Spatula grabbed")
+		tomWithFriesBasketFullImg.isVisible=false
+		tomWithFriesBasketEmptyImg.isVisible=true
+		if friesInHand=="100G" then
+			readyFriesAmmountInGrams=readyFriesAmmountInGrams+100
+		elseif friesInHand=="200G" then
+			readyFriesAmmountInGrams=readyFriesAmmountInGrams+200
+		elseif friesInHand=="300G" then
+			readyFriesAmmountInGrams=readyFriesAmmountInGrams+300
+		end 
+		updateFriesBox()
+	end
+end
 
 local function handleKitchenCollision(sprite)
 	if sprite.myName == "Fridge Door Fries" then
@@ -1068,6 +1211,15 @@ local function handleKitchenCollision(sprite)
 		friesMesure(sprite)
 		friesCupGrabOrReturn(sprite)
 	end
+	if sprite.myName ==  "Fryer 1" or sprite.myName ==  "Fryer 2" then
+		friesTakeFromFryer(sprite)
+		friesPutInFryer(sprite)
+		--put basket back in fryer
+	end
+	if sprite.myName ==  "Fries box" or sprite.myName ==  "Fryer 2" then
+		putFriesInFriesBox(sprite)
+	end
+	
 end
 
 -- Function to handle collision with poops
@@ -1375,6 +1527,47 @@ poopTimer = timer.performWithDelay( 50000, poop, 0 )
 
 local animationLoopTimer
 
+function animateFryerTimers()
+	if timer1_state=="frying" then
+		print("animation fyring")
+		if timer1_counter1.isVisible then
+			print("fyrer1 counter1")
+			timer1_counter1.isVisible=false
+			timer1_counter2.isVisible=true
+		else
+			print("fyrer1 counter2")
+			timer1_counter1.isVisible=true
+			timer1_counter2.isVisible=false
+		end
+	elseif	timer1_state=="done" then
+		if timer1_on.isVisible then
+			print("Fryer 1 flashin off")
+			timer1_on.isVisible=false
+			timer1_off.isVisible=true
+		else
+			print("Fryer 1 flashin on")
+			timer1_on.isVisible=true
+			timer1_off.isVisible=false
+		end
+	end
+	if timer2_state=="frying" then
+		if timer2_counter1.isVisible then
+			timer2_counter1.isVisible=false
+			timer2_counter2.isVisible=true
+		else
+			timer2_counter1.isVisible=true
+			timer2_counter2.isVisible=false
+		end
+	elseif	timer2_state=="done" then
+		if timer2_on.isVisible then
+			timer2_on.isVisible=false
+			timer2_off.isVisible=true
+		else
+			timer2_on.isVisible=true
+			timer2_off.isVisible=false
+		end
+	end
+end
 function animateGriddle(obj)
 	if obj.state=="raw"	then
 		if obj.griddle_slot_raw_frame1Img.isVisible then
@@ -1403,6 +1596,7 @@ function animateGriddle(obj)
 	end
 end
 function animationLoop()
+	animateFryerTimers()
 	animateGriddle(griddle_slot1)
 	animateGriddle(griddle_slot2)
 	animateGriddle(griddle_slot3)
