@@ -1,2 +1,2 @@
 # TomBurger3Solar2d
-Hamburger Simulation game
+Hamburger Shop Simulation game
