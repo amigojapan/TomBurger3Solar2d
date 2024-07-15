@@ -121,6 +121,12 @@ fries_box_5.isVisible=false
 fries_box_empty=display.newImage("img/fries_box_empty.png", gridSize*2, gridSize*2,gridSize,gridSize)
 resizeObjectToGridSize(fries_box_empty,"Fries box")
 --add colored fries counters
+fryer1_no_tray=display.newImage("img/fryer_no_tray.png", gridSize*2, gridSize*3,gridSize,gridSize)
+resizeObjectToGridSize(fryer1_no_tray,"Fryer 1")
+fryer2_no_tray=display.newImage("img/fryer_no_tray.png", gridSize*2, gridSize*4,gridSize,gridSize)
+resizeObjectToGridSize(fryer2_no_tray,"Fryer 2")
+fryer1_no_tray.isVisible=false
+fryer2_no_tray.isVisible=false
 fryer1_with_fries=display.newImage("img/fryer_with_fries.png", gridSize*2, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(fryer1_with_fries,"block")
 fryer2_with_fries=display.newImage("img/fryer_with_fries.png", gridSize*2, gridSize*4,gridSize,gridSize)
@@ -129,6 +135,8 @@ fryer1_empty=display.newImage("img/fryer_empty.png", gridSize*2, gridSize*3,grid
 resizeObjectToGridSize(fryer1_empty,"Fryer 1")
 fryer2_empty=display.newImage("img/fryer_empty.png", gridSize*2, gridSize*4,gridSize,gridSize)
 resizeObjectToGridSize(fryer2_empty,"Fryer 2")
+
+
 
 timer1_on=display.newImage("img/fryer_timer_ready.png", gridSize*1, gridSize*3,gridSize,gridSize)
 resizeObjectToGridSize(timer1_on,"timer1")
@@ -824,24 +832,26 @@ local fryer2Timer
 function helperPutFriesInFryer(sprite)
 	tomWithFriesMesuringCupWithFriesImg.isVisible=false
 	tomWithFriesMesuringCupWithoughtFriesImg.isVisible=true
-	if sprite==fryer1_empty then
+	if sprite==fryer1_no_tray then
+		print("Hit empty fryer 1")
 		fryer1_empty.isVisible=false
 		fryer1_with_fries.isVisible=true
 		fryer1_with_fries_ammount=friesMesurignCupAmmount
 		fryer1Timer=timer.performWithDelay(15000, fryer1DoneEvent, 0 )
 		timer1_state="frying"
-		--print("Fryer 1 frying")
+		print("Fryer 1 frying")
 		timer1_off.isVisible=false
 		timer1_on.isVisible=false
 		timer1_counter1.isVisible=true
 	end
-	if sprite==fryer2_empty then
+	if sprite==fryer2_no_tray then
+		print("Hit empty fryer 2")
 		fryer2_empty.isVisible=false
 		fryer2_with_fries.isVisible=true
 		fryer2_with_fries_ammount=friesMesurignCupAmmount
 		fryer2Timer=timer.performWithDelay(15000, fryer2DoneEvent, 0 )
 		timer2_state="frying"
-		--print("Fryer 2 frying")
+		print("Fryer 2 frying")
 		timer2_off.isVisible=false
 		timer2_on.isVisible=false
 		timer2_counter1.isVisible=true
@@ -865,17 +875,28 @@ function friesPutInFryer(sprite)
 	end
 end
 friesInHand="0G"
-function friesTakeFromFryer(sprite)
+function friesTakeAndPutBackFromFryer(sprite)
+	if tomWithFriesBasketEmptyImg.isVisible and sprite==fryer1_no_tray  and fryer1_with_fries.isVisible==false then
+		tomWithFriesBasketEmptyImg.isVisible=false
+		tomImg.isVisible=true
+		fryer1_empty.isVisible=true
+	end
+	if tomWithFriesBasketEmptyImg.isVisible and sprite==fryer2_no_tray  and fryer2_with_fries.isVisible==false then
+		tomWithFriesBasketEmptyImg.isVisible=false
+		tomImg.isVisible=true
+		fryer2_empty.isVisible=true
+	end
 	if tomImg.isVisible and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
-		if sprite==fryer1_empty and timer1_state=="done" and fryer1_with_fries.isVisible then
-			fryer1_empty.isVisible=true
+		if sprite==fryer1_no_tray and timer1_state=="done" and fryer1_with_fries.isVisible then
+			fryer1_no_tray.isVisible=true
+			fryer1_empty.isVisible=false
 			fryer1_with_fries.isVisible=false
 			friesInHand=fryer1_with_fries_ammount
 			fryer1_with_fries_ammount="0G"
 			timer1_state="off"
-			print("Took fries barket 1 ".. friesInHand)
+			print("Took fries basket 1 ".. friesInHand)
 			timer1_off.isVisible=true
 			timer1_on.isVisible=false
 			timer1_counter1.isVisible=false
@@ -883,20 +904,20 @@ function friesTakeFromFryer(sprite)
 			tomImg.isVisible=false
 			tomWithFriesBasketFullImg.isVisible=true	
 		end
-		if sprite==fryer2_empty and timer2_state=="done" and fryer2_with_fries.isVisible then
-			fryer2_empty.isVisible=true
+		if sprite==fryer2_no_tray and timer2_state=="done" and fryer2_with_fries.isVisible then
+			fryer2_no_tray.isVisible=true
+			fryer2_empty.isVisible=false
 			fryer2_with_fries.isVisible=false
 			friesInHand=fryer2_with_fries_ammount
 			fryer2_with_fries_ammount="0G"
 			timer2_state="off"
-			print("Took fries barket 2 ".. friesInHand)
+			print("Took fries basket 2 ".. friesInHand)
 			timer2_off.isVisible=true
 			timer2_on.isVisible=false
 			timer2_counter1.isVisible=false
 			timer2_counter2.isVisible=false
 			tomImg.isVisible=false
 			tomWithFriesBasketFullImg.isVisible=true
-	
 		end
 	end
 end
@@ -1212,7 +1233,7 @@ local function handleKitchenCollision(sprite)
 		friesCupGrabOrReturn(sprite)
 	end
 	if sprite.myName ==  "Fryer 1" or sprite.myName ==  "Fryer 2" then
-		friesTakeFromFryer(sprite)
+		friesTakeAndPutBackFromFryer(sprite)
 		friesPutInFryer(sprite)
 		--put basket back in fryer
 	end
