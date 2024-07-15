@@ -1,5 +1,5 @@
 --constarts
-debugVersion="       debugVerion 5,"
+debugVersion="       debugVerion 14,"
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
@@ -875,16 +875,21 @@ function friesPutInFryer(sprite)
 	end
 end
 friesInHand="0G"
+--bug, somewhare in the following code, there is a bug which leaves the basket in the fryer instead of taking it, then you can return the basket even then, not sure what the bug is
 function friesTakeAndPutBackFromFryer(sprite)
 	if tomWithFriesBasketEmptyImg.isVisible and sprite==fryer1_no_tray  and fryer1_with_fries.isVisible==false then
+		print("Returned basket to fryer 1")
 		tomWithFriesBasketEmptyImg.isVisible=false
 		tomImg.isVisible=true
 		fryer1_empty.isVisible=true
+		return
 	end
 	if tomWithFriesBasketEmptyImg.isVisible and sprite==fryer2_no_tray  and fryer2_with_fries.isVisible==false then
+		print("Returned basket to fryer 2")
 		tomWithFriesBasketEmptyImg.isVisible=false
 		tomImg.isVisible=true
 		fryer2_empty.isVisible=true
+		return
 	end
 	if tomImg.isVisible and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
@@ -1033,13 +1038,13 @@ function yellowWrapperGrabOrReturn(sprite)
 	if tomImg.isVisible and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
-		print("Spatula grabbed")
+		print("Yellow wrapper grabbed")
 		tomImg.isVisible=false
 		tomWithYellowWrapperImg.isVisible=true
 	elseif tomWithYellowWrapperImg.isVisible and tom.waitingToGrabAgain==false then
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
-		print("Spatula returned")
+		print("Yellow wrapper returned")
 		tomImg.isVisible=true
 		tomWithYellowWrapperImg.isVisible=false
 	end
@@ -1237,7 +1242,7 @@ local function handleKitchenCollision(sprite)
 		friesPutInFryer(sprite)
 		--put basket back in fryer
 	end
-	if sprite.myName ==  "Fries box" or sprite.myName ==  "Fryer 2" then
+	if sprite.myName ==  "Fries box" then
 		putFriesInFriesBox(sprite)
 	end
 	
@@ -1434,7 +1439,7 @@ local function myLeftTouchListener( event )
 		moveTomLeft()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomLeft, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
-	elseif ( event.phase == "ended") then
+	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
     end
     return true  -- Prevents tap/touch propagation to underlying objects
@@ -1456,7 +1461,7 @@ local function myRightTouchListener( event )
 		moveTomRight()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomRight, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
-	elseif ( event.phase == "ended") then
+	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
 	end
     return true  -- Prevents tap/touch propagation to underlying objects
@@ -1474,7 +1479,7 @@ local function myUpTouchListener( event )
 		moveTomUp()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomUp, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
-	elseif ( event.phase == "ended") then
+	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
     end
     return true  -- Prevents tap/touch propagation to underlying objects
@@ -1492,7 +1497,7 @@ local function myDownTouchListener( event )
 		moveTomDown()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomDown, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
-	elseif ( event.phase == "ended") then
+	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
     end
     return true  -- Prevents tap/touch propagation to underlying objects
@@ -1667,7 +1672,7 @@ audio.play( musicTrack, { channel=1, loops=-1 } )
 
 --(done)make tom take the broom
 
---handle the onbutton move event, it gets stuck now if you
+--((bug was not fixed on touchscreens)fixed(I think(need to test on touchscreen))handle the onbutton move event, it gets stuck now if you
 --move your finger during touch
 
 
