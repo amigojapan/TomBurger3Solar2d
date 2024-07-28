@@ -1,11 +1,14 @@
 --constarts
-debugVersion="       debugVerion 15,"
+debugVersion="       debugVerion 16,"
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
 cookingTime=15000
+difficulty=1
+SecondsPerHour=3
 
-
+--globals
+poops={}
 -- Define grid boundaries
 local gridWidth = display.contentWidth
 local gridHeight = display.contentHeight
@@ -173,12 +176,20 @@ resizeObjectToGridSize(fridge1,"Fries fridge")
 
 register=display.newImage("img/register.png", gridSize*6, gridSize*1,gridSize,gridSize)
 resizeObjectToGridSize(register,"block")
-sekino=display.newImage("img/sekino.png", gridSize*6, gridSize*2,gridSize,gridSize)
-resizeObjectToGridSize(sekino,"block")
+sekino_frontImg=display.newImage("img/sekino.png", gridSize*6, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(sekino_frontImg,"sekino_front")
+sekino_frontImg.isVisible=false
+
+
+sekino_orderImg=display.newImage("img/sekino_order.png", gridSize*6, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(sekino_orderImg,"sekino_order")
+sekino_orderImg.isVisible=true
+
+
 orders_tray=display.newImage("img/orders_tray.png", gridSize*5, gridSize*2,gridSize,gridSize)
 resizeObjectToGridSize(orders_tray,"Orders Tray")
 orders_spindle=display.newImage("img/orders_spindle.png", gridSize*5, gridSize*3,gridSize,gridSize)
-resizeObjectToGridSize(orders_spindle,"orders_spindle")
+resizeObjectToGridSize(orders_spindle,"orders spindle")
 --fry scale
 fry_scale_100g=display.newImage("img/fry_scale_100g.png", gridSize*5, gridSize*4,gridSize,gridSize)
 fry_scale_100g.width=gridSize
@@ -201,6 +212,7 @@ fry_scale_empty.width=gridSize
 fry_scale_empty.height=gridSize
 fry_scale_empty.myName = "Fry scale empty"
 table.insert(kitchen, fry_scale_empty)
+
 
 
 function dresserTablePrepareObj(x,y)
@@ -376,6 +388,113 @@ rat.width=gridSize
 rat.height=gridSize
 rat.myName = "rat"
 rat.InMotion=false
+
+speech_bubbleImg=display.newImage("img/speech_bubble.png", gridSize*8, gridSize*2.7,gridSize,gridSize)
+speech_bubbleImg.width=speech_bubbleImg.width*1.5
+speech_bubbleImg.height=speech_bubbleImg.height*1.5
+textOffsetX=gridSize*8
+textOffsetY=64*2.3
+local orderLabelLine1 = display.newText( "ハンバーガー：２個", textOffsetX , textOffsetY, "fonts/ume-tgc5.ttf", 20 )
+textOffsetY=textOffsetY+20
+local orderLabelLine2 = display.newText( "チーズバーガー：１個",  textOffsetX, textOffsetY, "fonts/ume-tgc5.ttf", 20 )
+textOffsetY=textOffsetY+20
+local orderLabelLine3 = display.newText( "ポテトフライ：３個",  textOffsetX, textOffsetY, "fonts/ume-tgc5.ttf", 20 )
+orderLabelLine1:setTextColor( 0, 0, 0 )
+orderLabelLine2:setTextColor( 0, 0, 0 )
+orderLabelLine3:setTextColor( 0, 0, 0 )
+orderLabelLine1.isVisible=false
+orderLabelLine2.isVisible=false
+orderLabelLine3.isVisible=false
+
+
+speech_bubbleImg.isVisible=false
+sekino_orderImg.isVisible=false
+sekino_frontImg.isVisible=true
+orders={}
+orders.burgers=0
+orders.cheeseBurgers=0
+orders.frenchFries=0
+
+local orderHideTimer
+function randomOrder()
+	textOffsetX=gridSize*8
+	textOffsetY=64*2.3
+	if difficulty==1 then
+		hamburgerCount=math.random(1,2)
+		cheeseBurgerCount=math.random(1,2)
+		frenchFryCount=math.random(1,2)
+	end
+	orders.burgers=orders.burgers+hamburgerCount
+	orders.cheeseBurgers=orders.cheeseBurgers+cheeseBurgerCount
+	orders.frenchFries=orders.frenchFries+frenchFryCount
+	orderLabelLine1.text="ハンバーガー：" .. tostring(hamburgerCount) .. "個"
+	orderLabelLine2.text="チーズバーガー：" .. tostring(cheeseBurgerCount) .. "個" 
+	orderLabelLine3.text="ポテトフライ：" .. tostring(frenchFryCount) .. "個"
+	orderLabelLine1.isVisible=true
+	orderLabelLine2.isVisible=true
+	orderLabelLine3.isVisible=true
+	speech_bubbleImg.isVisible=true
+	sekino_orderImg.isVisible=true
+	sekino_frontImg.isVisible=false
+	
+	orderHideTimer = timer.performWithDelay( 5000, hideOrder, 0 )
+
+	if ordersRectangle.isVisible then
+		showOrders(nil)
+	end
+
+end
+function hideOrder()
+	orderLabelLine1.isVisible=false
+	orderLabelLine2.isVisible=false
+	orderLabelLine3.isVisible=false
+	speech_bubbleImg.isVisible=false
+	sekino_orderImg.isVisible=false
+	sekino_frontImg.isVisible=true
+	timer.cancel(orderHideTimer)
+end
+
+
+
+ordersRectangle = display.newRect(gridSize*6, gridSize*6, gridSize*3, gridSize*3 )
+textOffsetX=gridSize*6
+textOffsetY=gridSize*5.5
+local orderSlipLabelLine1 = display.newText( "ハンバーガー：0個", textOffsetX , textOffsetY, "fonts/ume-tgc5.ttf", 20 )
+textOffsetY=textOffsetY+20
+local orderSlipLabelLine2 = display.newText( "チーズバーガー：0個",  textOffsetX, textOffsetY, "fonts/ume-tgc5.ttf", 20 )
+textOffsetY=textOffsetY+20
+local orderSlipLabelLine3 = display.newText( "ポテトフライ：0個",  textOffsetX, textOffsetY, "fonts/ume-tgc5.ttf", 20 )
+orderSlipLabelLine1:setTextColor( 0, 0, 0 )
+orderSlipLabelLine2:setTextColor( 0, 0, 0 )
+orderSlipLabelLine3:setTextColor( 0, 0, 0 )
+
+--blocks to hide orders slip
+hidebox=display.newImage("img/register.png", gridSize*7, gridSize*3,gridSize,gridSize)
+resizeObjectToGridSize(hidebox,"hide orders slip box")
+hidebox.isVisible=false
+hidebox=display.newImage("img/register.png", gridSize*6, gridSize*4,gridSize,gridSize)
+resizeObjectToGridSize(hidebox,"hide orders slip box")
+hidebox.isVisible=false
+
+hidebox=display.newImage("img/register.png", gridSize*4, gridSize*2,gridSize,gridSize)
+resizeObjectToGridSize(hidebox,"hide orders slip box")
+hidebox.isVisible=false
+hidebox=display.newImage("img/register.png", gridSize*3, gridSize*3,gridSize,gridSize)
+resizeObjectToGridSize(hidebox,"hide orders slip box")
+hidebox.isVisible=false
+hidebox=display.newImage("img/register.png", gridSize*4, gridSize*4,gridSize,gridSize)
+resizeObjectToGridSize(hidebox,"hide orders slip box")
+hidebox.isVisible=false
+
+function hideOrderSlip()
+	ordersRectangle.isVisible=false
+	orderSlipLabelLine1.isVisible=false
+	orderSlipLabelLine2.isVisible=false
+	orderSlipLabelLine3.isVisible=false
+end
+
+hideOrderSlip()
+
 
 tom = display.newGroup()
 --tom=display.newImage("img/Tom.png", gridSize*10, gridSize*10,gridSize,gridSize)
@@ -1173,6 +1292,24 @@ function putFriesInFriesBox(sprite)
 	end
 end
 
+function showOrders(sprite)
+	print("Show orders slip")
+	ordersRectangle.isVisible=true
+	ordersRectangle.strokeWidth = 5
+	ordersRectangle:setFillColor( 1, 1 , 1 )
+	ordersRectangle:setStrokeColor( 0, 0, 0 )
+	hamburgerCount=orders.burgers
+	cheeseBurgerCount=orders.cheeseBurgers
+	frenchFryCount=orders.frenchFries
+	orderSlipLabelLine1.text="ハンバーガー：" .. tostring(hamburgerCount) .. "個"
+	orderSlipLabelLine2.text="チーズバーガー：" .. tostring(cheeseBurgerCount) .. "個" 
+	orderSlipLabelLine3.text="ポテトフライ：" .. tostring(frenchFryCount) .. "個"
+	orderSlipLabelLine1.isVisible=true
+	orderSlipLabelLine2.isVisible=true
+	orderSlipLabelLine3.isVisible=true
+	--set a new random time
+	oirderTimeSet()
+end
 local function handleKitchenCollision(sprite)
 	if sprite.myName == "Fridge Door Fries" then
 		print("touches")
@@ -1306,7 +1443,12 @@ local function handleKitchenCollision(sprite)
 	if sprite.myName ==  "Fries box" then
 		putFriesInFriesBox(sprite)
 	end
-	
+	if sprite.myName ==  "orders spindle" then
+		showOrders(sprite)
+	end
+	if sprite.myName ==  "hide orders slip box" then
+		hideOrderSlip()
+	end
 end
 
 -- Function to handle collision with poops
@@ -1373,7 +1515,7 @@ function moveInDirection(dx, dy, direction, movingObject)
                 -- happens when tom moves
                 col.text = debugVersion .. "collision:true kitchen object:"..sprite.myName
                 handleKitchenCollision(sprite)
-				if ((tom.holdingBroom  and  sprite.myName=="broom") or sprite.myName=="Fridge Door Fries" or sprite.myName=="Fridge Door Patties" or sprite.myName=="Fridge Door Close") then
+				if ((tom.holdingBroom  and  sprite.myName=="broom") or sprite.myName=="Fridge Door Fries" or sprite.myName=="Fridge Door Patties" or sprite.myName=="Fridge Door Close" or sprite.myName=="hide orders slip box") then
 					--make kitchen object non solid
 					collided=false
 					break	
@@ -1455,7 +1597,7 @@ end
 
 --handle keystrokes
 local action = {}
-local function moveCharacter()
+function moveCharacter()
 	if detectCollision(tom.x-(tom.width/2), tom.y-(tom.height/2), tom.width, tom.height, pipe.x-(pipe.width/2), pipe.y-(pipe.height/2), pipe.width, pipe.height) then
 		col.text = debugVersion .. "collision:ture"
 	else
@@ -1481,7 +1623,7 @@ local function moveCharacter()
 	end
 end
 
-local function onKeyEvent( event )
+function onKeyEvent( event )
 	if event.phase == "down" then
 		action[event.keyName] = true
 	else
@@ -1502,10 +1644,10 @@ end
 
 local fireTimer
 
-local function myLeftTouchListener( event )
+function myLeftTouchListener( event )
     if ( event.phase == "began" ) then
 		moveTomLeft()
-		--fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomLeft, 0 )
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomLeft, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
@@ -1527,7 +1669,7 @@ myLeftButton:addEventListener( "touch", myLeftTouchListener )  -- Add a "touch" 
 local function myRightTouchListener( event )
     if ( event.phase == "began" ) then
 		moveTomRight()
-		--fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomRight, 0 )
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomRight, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
@@ -1545,7 +1687,7 @@ myRightButton:addEventListener( "touch", myRightTouchListener )  -- Add a "touch
 local function myUpTouchListener( event )
     if ( event.phase == "began" ) then
 		moveTomUp()
-		--fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomUp, 0 )
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomUp, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
@@ -1563,7 +1705,7 @@ myUpButton:addEventListener( "touch", myUpTouchListener )  -- Add a "touch" list
 local function myDownTouchListener( event )
     if ( event.phase == "began" ) then
 		moveTomDown()
-		--fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomDown, 0 )
+		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomDown, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
 		timer.cancel( fireTimer )
@@ -1597,8 +1739,59 @@ end
 
 fireRatTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, gameloop, 0 )
 
+local orderTimer
+function oirderTimeSet()
+	if difficulty ==1 then
+		orderWaitTime=math.random(50000, 80000)
+		--orderWaitTime=25000
+	end
+	if orderTimer ~= nil then
+		timer.cancel(orderTimer)
+	end
+	--do later, randomize order timming for each order
+	orderTimer = timer.performWithDelay( orderWaitTime, randomOrder, 0 )
+	print("Waiting " .. orderWaitTime .."for next orders to come in")
+end
+oirderTimeSet()
+
+textOffsetX=gridSize*13
+textOffsetY=gridSize*1
+local labelTimeLeft = display.newText( "残り８時間", textOffsetX , textOffsetY, "fonts/ume-tgc5.ttf", 40 )
+labelTimeLeft:setTextColor( 1, 1, 0 )
+local x=gridSize*11.5
+local y=gridSize*1.6
+local w=gridSize*3
+local h=gridSize/2
+local lifeBarRedRectangle = display.newRect(x, y, w, h )
+lifeBarRedRectangle:setFillColor(1,0,0)
+local lifeBarBlueRectangle = display.newRect(x, y, w, h )
+lifeBarBlueRectangle:setFillColor(0,0,1)
+lifeBarBlueRectangle.anchorX=0
+lifeBarRedRectangle.anchorX=0
+
+--lifeBarRedRectangle.width=w/2
+--lifeBarRedRectangle.x=x-w/4
+function setLife(percentage)
+	lifeBarBlueRectangle.width = w * (percentage / 100)
+end
+setLife(80)
+local hourTimer
+hours=8
+print(hours .. "H left")
+function oneHourOver()
+	hours=hours-1
+	if hours == 0 then
+		print("Workday over!")
+		hours=8
+	end
+	labelTimeLeft.text="残り" .. tostring(hours) .. "時間"
+	print(hours .. "H left")
+end
+hourTimer = timer.performWithDelay( SecondsPerHour*1000, oneHourOver, 0 ) --one minute per hour
+print("Waiting " .. orderWaitTime .."for next orders to come in")
+
+
 --poop table
-poops ={}
 
 local poopTimer
 function poop()
