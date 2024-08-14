@@ -10,6 +10,8 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
 
 local function gotoGame()
+	print("goto game screen")
+	composer.removeScene( "game" )
 	composer.gotoScene( "game" )
 end
 
@@ -24,9 +26,13 @@ end
 
 -- create()
 function updateScene(sceneGroup)
-	local background = display.newImageRect( sceneGroup, "background.png", 1400,800 )
+	local background = display.newImageRect( sceneGroup, "backgrounds/background.png", 1400,800 )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
+	ordersRectangle = display.newRect(sceneGroup,display.contentCenterX, display.contentCenterY, 1000-100, 800-50 )
+	ordersRectangle.strokeWidth = 5
+	ordersRectangle:setFillColor( 0, 0 , 0, 0.5 )
+	ordersRectangle:setStrokeColor( 1, 0, 0 )
 	language=composer.getVariable( "language" )
 	print("language:"..language)
 	translate=i18n_setlang(language)
@@ -133,15 +139,30 @@ function updateScene(sceneGroup)
 	wastePoints=0
 	inclmpleteOderPoints=0
 	bonus=0
-	offsetY=offsetY+100
-
-	local lableTotalPoints = display.newText( sceneGroup, "トータルポイント：" .. tostring(totalPoints) , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 75 )
+	
+	offsetY=offsetY+55
+	local lableTotalPoints = display.newText( sceneGroup, "今回ポイント：" .. tostring(totalPoints) , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 45 )
 	if totalPoints > 0 then
 		lableTotalPoints:setTextColor( 1, 1, 0 )
 	else
 		lableTotalPoints:setTextColor( 1, 0, 0 )
 	end
-	translate=i18n_setlang("English")
+	local totalPointsFinal = composer.getVariable( "totalPointsFinal" )
+	if totalPointsFinal==nil then
+		totalPointsFinal=totalPoints
+	else
+		totalPointsFinal=totalPointsFinal+totalPoints
+	end
+	composer.setVariable( "totalPointsFinal", totalPointsFinal )
+	offsetY=offsetY+55
+	local lableTotalPoints = display.newText( sceneGroup, "トータルポイント：" .. tostring(totalPointsFinal) , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 45 )
+	if totalPoints > 0 then
+		lableTotalPoints:setTextColor( 1, 1, 0 )
+	else
+		lableTotalPoints:setTextColor( 1, 0, 0 )
+	end
+
+	--translate=i18n_setlang("English")
 --translate=i18n_setlang("Spanish")
 --print(translate["hw"])
 --print(translate["gw"])

@@ -26,7 +26,7 @@ local function gotoGameSpanish()
 end
 
 local function gotoHighScores()
-	composer.gotoScene( "dailyScoresScreen" )
+	composer.gotoScene( "scoresScreen" )
 end
 
 
@@ -40,12 +40,20 @@ function scene:create( event )
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 
-	local background = display.newImageRect( sceneGroup, "background.png", 1400,800 )
+	local background = display.newImageRect( sceneGroup, "backgrounds/background.png", 1400,800 )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
-	local title = display.newImageRect( sceneGroup, "img/tom burger 3 title.png", 676, 97 )
-	title.x = display.contentCenterX
-	title.y = 200
+	ordersRectangle = display.newRect(sceneGroup,display.contentCenterX, display.contentCenterY, 1000-100, 800-50 )
+	ordersRectangle.strokeWidth = 5
+	ordersRectangle:setFillColor( 0, 0 , 0, 0.5 )
+	ordersRectangle:setStrokeColor( 1, 0, 0 )
+
+	local lblTitle = display.newText( sceneGroup, "Tom Burger 3", display.contentCenterX, 50, "fonts/ume-tgc5.ttf", 75 )
+	lblTitle:setFillColor( 0.82, 0.86, 1 )
+	--local title = display.newImageRect( sceneGroup, "img/tom burger 3 title.png", 676, 97 )
+	--title.x = display.contentCenterX
+	--title.y = 200
+
 
 	offsetY=500
 	translate=i18n_setlang("English")

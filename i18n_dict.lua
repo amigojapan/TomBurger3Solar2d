@@ -46,7 +46,7 @@ i18n["Japanese"]={
 	["Total Points"]="トータルポイント：",
 	["Difficulty"]="難易度（なんいど）",
 	["Easy"]="かんたん",
-	["Medium"]="ちゅう",
+	["Medium"]="ふつう",
 	["Hard"]="むずかしい"
 }
 i18n["Spanish"]={

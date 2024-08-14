@@ -261,12 +261,14 @@ function scene:hide( event )
 		lifeBarBlueRectangle.isVisible=false
 		col.isVisible=false
 		hideOrder()
-
-		for key, sprite in pairs(poops) do
-			sprite.isVisible=false
-			--poops.poop_frame1.isVisible=false
-			--poops.poop_frame2.isVisible=false
+		if poost ~= nil then
+			for key, sprite in pairs(poops) do
+				sprite.isVisible=false
+				--poops.poop_frame1.isVisible=false
+				--poops.poop_frame2.isVisible=false
+			end
 		end
+		myHelpButton.isVisible=false
 		--stop music
 		audio.stop( 1 )
 	end
@@ -516,6 +518,7 @@ function scene:show( event )
 		sekino_orderImg.isVisible=false
 		sekino_frontImg.isVisible=true
 		
+		randomOrder()--set a starting order
 	end
 end
 
@@ -524,7 +527,7 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 --constants
-debugVersion="       debugVerion A18,"
+debugVersion="       debugVerion A22,"
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
@@ -537,7 +540,7 @@ local gridHeight = display.contentHeight
 poops={}
 lifePerecentage=100
 if difficulty == 1 or difficulty == 2 or difficulty == 3 then
-	millisecondsPerHour=60000	--change this to 60 later
+	millisecondsPerHour=2000	--change this to 60 later
 end
 
 
@@ -1820,7 +1823,13 @@ function handleRatCollision(sprite)
 	lifePerecentage=lifePerecentage-30
 	if lifePerecentage <= 11 then
 		print("Game Over")
-
+		require("writeScores")
+		local totalPointsFinal = composer.getVariable( "totalPointsFinal" )
+		if totalPointsFinal==nil then
+			totalPointsFinal=0
+		end
+		writeScore("\n"..tostring(totalPointsFinal), difficulty)
+		composer.setVariable( "totalPointsFinal", nil )
 		composer.gotoScene( "menu" )
 	end
 end
@@ -2008,6 +2017,43 @@ function onKeyEvent( event )
 		action[event.keyName] = false
 	end
 end
+--help button
+webView=nil
+function myHelpTouchListener( event )
+    if ( event.phase == "began" ) then
+        print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
+		if webView==nil or webView.isVisible==false then 
+			webView = native.newWebView( display.contentCenterX, display.contentCenterY, 1000-gridSize*4, 800-gridSize*2 )
+			language=composer.getVariable( "language" )
+			print("langauge:"..language)
+			if language == "English" then
+				webView:request( "https://amjp.psy-k.org/tom-burger/docs-en.html" )
+			elseif language == "Japanese" then
+				webView:request( "https://amjp.psy-k.org/tom-burger/docs-jp.html" )
+			elseif  language == "Spanish" then
+				webView:request( "https://amjp.psy-k.org/tom-burger/docs-es.html" )
+			end
+			webView.isVisible=true
+		else 
+			webView.isVisible=false
+		end
+	end
+    return true  -- Prevents tap/touch propagation to underlying objects
+end
+
+offsetx=gridSize*15
+offsety=gridSize*3
+
+local paint = {
+    type = "image",
+    filename = "img/How_to_play.png"
+}
+myHelpButton = display.newRect(offsetx, offsety, gridSize, gridSize )
+myHelpButton.fill = paint
+
+myHelpButton:addEventListener( "touch", myHelpTouchListener )  -- Add a "touch" listener to the obj
+myHelpButton.isVisible=true
+
 
 --Runtime:addEventListener( "collision", onLocalCollision )
 Runtime:addEventListener( "enterFrame", moveCharacter )
@@ -2387,6 +2433,8 @@ readySoundEffect = audio.loadStream( "audio/ready.wav",system.ResourceDirectory)
 
 audio.play(startUpSoundEffect)
 
+print("Reached end of code.")
+
 return scene
 
 --(done)
@@ -2402,7 +2450,7 @@ return scene
 --(done)block Tom from going out of the play area
 
 --(fixed(you cant put a parameter in the oncomplete function in the --transition function, this was causing the obscure bug)
---keep tom (?and rat) inside grid area
+--(done)keep tom (?and rat) inside grid area
 
 --(done)make the rat and tom have sepperate moving  variables so they can move seperately
 
@@ -2422,8 +2470,13 @@ return scene
 --(done)and a timeout
 --(done)and a life bar
 --(done)Main menu?
---score chart
 --also complete these details:
 --(done)you may get rid of some items you are holding by throwing them in the trash can
 --(done I think)bug, cant throw away a patty
 --bug, seems there is still problems in the touch controls where tom gets stuck moving in a direction
+--(done)add a web view for the help for how to play
+--(done)add new images to menu (with alpha 50 black rectangla)
+--make an order appear first a little after the game starts 
+--tune difficulty settings
+--(hacked,reverted to the previous bug where the language does not change by putting the menu creation on the create event of the difficulty menu)new bug, game wont start for a second time (after changing language?)
+--save and display score screen
