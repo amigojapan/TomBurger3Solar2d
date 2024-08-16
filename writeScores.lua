@@ -1,5 +1,6 @@
 function writeScore(score, difficulty)
-    file = io.open("difficulty" .. difficulty .. ".txt", "a+")
+    path = system.pathForFile( "difficulty" .. difficulty .. ".txt", system.DocumentsDirectory)
+    file = io.open(path, "a+")
     file:write(score)
     file:close()
 end
@@ -23,8 +24,8 @@ end
 
 function getScoreTable(difficulty)
     -- tests the functions above
-    local file = "difficulty" .. difficulty .. ".txt"
-    local lines = lines_from(file)
+    path = system.pathForFile( "difficulty" .. difficulty .. ".txt", system.DocumentsDirectory)
+    local lines = lines_from(path)
             
     -- print all line numbers and their contents
     --print("unsorted")

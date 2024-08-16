@@ -10,19 +10,8 @@ local scene = composer.newScene()
 
 print( "ORIENTATION: "..system.orientation )
 
-local function gotoGameEnglish()
-	composer.setVariable( "Difficulty", 1 )
-	composer.gotoScene( "story" )
-end
-
-local function gotoGameJapanese()
-	composer.setVariable( "Difficulty", 2 )
-	composer.gotoScene( "story" )
-end
-
-local function gotoGameSpanish()
-	composer.setVariable( "Difficulty", 3 )
-	composer.gotoScene( "story" )
+local function gotoStart()
+	composer.gotoScene( "game" )
 end
 
 -- -----------------------------------------------------------------------------------
@@ -35,6 +24,30 @@ function scene:create( event )
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 
+	local background = display.newImageRect( sceneGroup, "backgrounds/background.png", 1400,800 )
+	background.x = display.contentCenterX
+	background.y = display.contentCenterY
+	ordersRectangle = display.newRect(sceneGroup,display.contentCenterX, display.contentCenterY, 1000-100, 800-50 )
+	ordersRectangle.strokeWidth = 5
+	ordersRectangle:setFillColor( 0, 0 , 0, 0.5 )
+	ordersRectangle:setStrokeColor( 1, 0, 0 )
+	if language=="English" then
+		story = display.newImageRect( sceneGroup, "backgrounds/storyEnglish.png", 1000,800 )
+	elseif language=="Japanese" then
+		story = display.newImageRect( sceneGroup, "backgrounds/storyJapanese.png", 1000,800 )
+	elseif language=="Spanish" then
+		story = display.newImageRect( sceneGroup, "backgrounds/storySpanish.png", 1000,800 )
+	end
+	story.x = display.contentCenterX
+	story.y = display.contentCenterY
+
+	local lblTitle = display.newText( sceneGroup, "Story", display.contentCenterX, 50, "fonts/ume-tgc5.ttf", 75 )
+	lblTitle:setFillColor( 0.82, 0.86, 1 )
+
+	local highScoresButton = display.newText( sceneGroup, "Start!", display.contentCenterX, 720, "fonts/ume-tgc5.ttf", 44 )
+	highScoresButton:setFillColor( 0.75, 0.78, 1 )
+
+	highScoresButton:addEventListener( "tap", gotoStart )
 end
 
 
@@ -49,40 +62,8 @@ function scene:show( event )
 		
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
-	--print("Removed scene")
-	--composer.removeScene( "game" )
-	language=composer.getVariable( "language" )
-	print("language:"..language)
-	translate=i18n_setlang(language)
-	local background = display.newImageRect( sceneGroup, "backgrounds/background.png", 1400,800 )
-	background.x = display.contentCenterX
-	background.y = display.contentCenterY
-	ordersRectangle = display.newRect(sceneGroup,display.contentCenterX, display.contentCenterY, 1000-100, 800-50 )
-	ordersRectangle.strokeWidth = 5
-	ordersRectangle:setFillColor( 0, 0 , 0, 0.5 )
-	ordersRectangle:setStrokeColor( 1, 0, 0 )
-	--local title = display.newImageRect( sceneGroup, "img/tom burger 3 title.png", 676, 97 )
-	--title.x = display.contentCenterX
-	--title.y = 200
-	local lblDifficulty = display.newText( sceneGroup, translate["Difficulty"], display.contentCenterX, 200, "fonts/ume-tgc5.ttf", 75 )
-	lblDifficulty:setFillColor( 1, 1, 0 )
-
-	offsetY=500
-	local startButtonEnglish = display.newText( sceneGroup, translate["Easy"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
-	startButtonEnglish:setFillColor( 0.82, 0.86, 1 )
-	startButtonEnglish:addEventListener( "tap", gotoGameEnglish )
-
-	offsetY=offsetY+55
-	local startButtonJapanese = display.newText( sceneGroup, translate["Medium"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
-	startButtonJapanese:setFillColor( 0.82, 0.86, 1 )
-	startButtonJapanese:addEventListener( "tap", gotoGameJapanese )
-
-	offsetY=offsetY+55
-	local startButtonSpanish = display.newText( sceneGroup, translate["Hard"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
-	startButtonSpanish:setFillColor( 0.82, 0.86, 1 )
-	startButtonSpanish:addEventListener( "tap", gotoGameSpanish )
-
-	
+		print("Removed scene")
+		composer.removeScene( "game" )
 	end
 end
 

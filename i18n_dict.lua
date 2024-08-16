@@ -2,7 +2,8 @@
 --dictionary for english, kept in seperate file you can include it by require("localizations.lua")
 i18n={}
 i18n["English"]={
-	["Start"]="Start (English)",
+	["Language"]="English",
+	["Start"]="Start!",
 	["Nokori"]="",
 	["Punkan"]=" Minutes Left",
 	["Hamburgers"]="Hamburgers :",
@@ -26,7 +27,8 @@ i18n["English"]={
 	["Hard"]="Hard"
 }
 i18n["Japanese"]={
-	["Start"]="スタート（日本語）",
+	["Language"]="日本語",
+	["Start"]="スタート!",
 	["Nokori"]="残り",
 	["Punkan"]="分間",
 	["Hamburgers"]="ハンバーガー :",
@@ -50,7 +52,8 @@ i18n["Japanese"]={
 	["Hard"]="むずかしい"
 }
 i18n["Spanish"]={
-	["Start"]="Comenzar (Español)",
+	["Language"]="Español",
+	["Start"]="Comenzar!",
 	["Nokori"]="Quedan ",
 	["Punkan"]=" minutos",
 	["Hamburgers"]="Hamburguesas :",

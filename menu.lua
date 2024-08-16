@@ -40,43 +40,6 @@ function scene:create( event )
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 
-	local background = display.newImageRect( sceneGroup, "backgrounds/background.png", 1400,800 )
-	background.x = display.contentCenterX
-	background.y = display.contentCenterY
-	ordersRectangle = display.newRect(sceneGroup,display.contentCenterX, display.contentCenterY, 1000-100, 800-50 )
-	ordersRectangle.strokeWidth = 5
-	ordersRectangle:setFillColor( 0, 0 , 0, 0.5 )
-	ordersRectangle:setStrokeColor( 1, 0, 0 )
-
-	local lblTitle = display.newText( sceneGroup, "Tom Burger 3", display.contentCenterX, 50, "fonts/ume-tgc5.ttf", 75 )
-	lblTitle:setFillColor( 0.82, 0.86, 1 )
-	--local title = display.newImageRect( sceneGroup, "img/tom burger 3 title.png", 676, 97 )
-	--title.x = display.contentCenterX
-	--title.y = 200
-
-
-	offsetY=500
-	translate=i18n_setlang("English")
-	local startButtonEnglish = display.newText( sceneGroup, translate["Start"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
-	startButtonEnglish:setFillColor( 0.82, 0.86, 1 )
-	startButtonEnglish:addEventListener( "tap", gotoGameEnglish )
-
-	offsetY=offsetY+55
-	translate=i18n_setlang("Japanese")
-	local startButtonJapanese = display.newText( sceneGroup, translate["Start"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
-	startButtonJapanese:setFillColor( 0.82, 0.86, 1 )
-	startButtonJapanese:addEventListener( "tap", gotoGameJapanese )
-
-	offsetY=offsetY+55
-	translate=i18n_setlang("Spanish")
-	local startButtonSpanish = display.newText( sceneGroup, translate["Start"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
-	startButtonSpanish:setFillColor( 0.82, 0.86, 1 )
-	startButtonSpanish:addEventListener( "tap", gotoGameSpanish )
-
-	local highScoresButton = display.newText( sceneGroup, "Scores,スコアー、Puntuaje", display.contentCenterX, 720, "fonts/ume-tgc5.ttf", 44 )
-	highScoresButton:setFillColor( 0.75, 0.78, 1 )
-
-	highScoresButton:addEventListener( "tap", gotoHighScores )
 end
 
 
@@ -92,7 +55,45 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
 		print("Removed scene")
-		composer.removeScene( "game" )
+		--composer.removeScene( "game" )
+		local background = display.newImageRect( sceneGroup, "backgrounds/background.png", 1400,800 )
+		background.x = display.contentCenterX
+		background.y = display.contentCenterY
+		ordersRectangle = display.newRect(sceneGroup,display.contentCenterX, display.contentCenterY, 1000-100, 800-50 )
+		ordersRectangle.strokeWidth = 5
+		ordersRectangle:setFillColor( 0, 0 , 0, 0.5 )
+		ordersRectangle:setStrokeColor( 1, 0, 0 )
+	
+		local lblTitle = display.newText( sceneGroup, "Tom Burger 3", display.contentCenterX, 50, "fonts/ume-tgc5.ttf", 75 )
+		lblTitle:setFillColor( 0.82, 0.86, 1 )
+		--local title = display.newImageRect( sceneGroup, "img/tom burger 3 title.png", 676, 97 )
+		--title.x = display.contentCenterX
+		--title.y = 200
+	
+	
+		offsetY=500
+		translate=i18n_setlang("English")
+		local startButtonEnglish = display.newText( sceneGroup, translate["Language"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
+		startButtonEnglish:setFillColor( 0.82, 0.86, 1 )
+		startButtonEnglish:addEventListener( "tap", gotoGameEnglish )
+	
+		offsetY=offsetY+55
+		translate=i18n_setlang("Japanese")
+		local startButtonJapanese = display.newText( sceneGroup, translate["Language"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
+		startButtonJapanese:setFillColor( 0.82, 0.86, 1 )
+		startButtonJapanese:addEventListener( "tap", gotoGameJapanese )
+	
+		offsetY=offsetY+55
+		translate=i18n_setlang("Spanish")
+		local startButtonSpanish = display.newText( sceneGroup, translate["Language"], display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 44 )
+		startButtonSpanish:setFillColor( 0.82, 0.86, 1 )
+		startButtonSpanish:addEventListener( "tap", gotoGameSpanish )
+	
+		local highScoresButton = display.newText( sceneGroup, "Scores,スコアー、Puntuaje", display.contentCenterX, 720, "fonts/ume-tgc5.ttf", 44 )
+		highScoresButton:setFillColor( 0.75, 0.78, 1 )
+	
+		highScoresButton:addEventListener( "tap", gotoHighScores )
+	
 	end
 end
 

@@ -6,6 +6,8 @@
 
 local composer = require( "composer" )
 
+composer.recycleOnSceneChange = true -- force scene recycle
+
 -- Hide status bar
 display.setStatusBar( display.HiddenStatusBar )
 

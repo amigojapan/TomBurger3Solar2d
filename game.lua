@@ -1,9 +1,14 @@
 local composer = require( "composer" )
+composer.recycleOnSceneChange = true -- force scene recycle
 local scene = composer.newScene()
 
 
 
 gameover=false
+local function frameUpdate()--function runs once per frame
+	detectColMovingObject(rat,tom)
+end
+
 function scene:create( event )
 
 	sceneGroup = self.view
@@ -142,8 +147,10 @@ function hideEverything()
 end
 
 function scene:hide( event ) 
-	local phase = event.phase 
-	if "did" == phase then 
+	local phase = event.phase
+	if ( phase == "will" ) then
+		Runtime:removeEventListener( "enterFrame", enterFrame ) 
+	elseif "did" == phase then 
 		local current =composer.getSceneName("current") 
 		composer.removeScene(current)
 		gameover=true
@@ -272,6 +279,7 @@ function scene:hide( event )
 		--stop music
 		audio.stop( 1 )
 	end
+	
 end
 
 kitchen={}
@@ -519,6 +527,11 @@ function scene:show( event )
 		sekino_frontImg.isVisible=true
 		
 		randomOrder()--set a starting order
+		tom.x = gridSize*10
+		tom.y = gridSize*10
+
+		gameover=false
+		Runtime:addEventListener( "enterFrame", frameUpdate )
 	end
 end
 
@@ -527,7 +540,7 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 --constants
-debugVersion="       debugVerion A22,"
+debugVersion="              debugVerion Beta18,"
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
@@ -540,7 +553,7 @@ local gridHeight = display.contentHeight
 poops={}
 lifePerecentage=100
 if difficulty == 1 or difficulty == 2 or difficulty == 3 then
-	millisecondsPerHour=2000	--change this to 60 later
+	millisecondsPerHour=60000	--change this to 60 later
 end
 
 
@@ -1822,6 +1835,7 @@ end
 function handleRatCollision(sprite)
 	lifePerecentage=lifePerecentage-30
 	if lifePerecentage <= 11 then
+		--Runtime:removeEventListener( "enterFrame", enterFrame)
 		print("Game Over")
 		require("writeScores")
 		local totalPointsFinal = composer.getVariable( "totalPointsFinal" )
@@ -1830,11 +1844,19 @@ function handleRatCollision(sprite)
 		end
 		writeScore("\n"..tostring(totalPointsFinal), difficulty)
 		composer.setVariable( "totalPointsFinal", nil )
+		print("goto menu")
+		gameover=true
+		--composer.removeScene("game")
+		--composer.removeScene( "menu" )
 		composer.gotoScene( "menu" )
 	end
 end
 
 function detectColMovingObject(movingObject, sprite)
+	if movingObject == nil or sprite == nil then
+		print("a nil object was detected")
+		return
+	end
 	if detectCollision(
 		movingObject.x - (movingObject.width / 2),
 		movingObject.y - (movingObject.height / 2), 
@@ -1843,7 +1865,7 @@ function detectColMovingObject(movingObject, sprite)
 		sprite.y - (sprite.height / 2),
 		sprite.width, sprite.height
 	) then
-		if movingObject.myName == "tom"  or movingObject.myName == "rat" then
+		if movingObject.myName == "rat" then
 			-- happens when tom moves
 			col.text = debugVersion .. "collision:true"
 			handleRatCollision(sprite)
@@ -1925,9 +1947,7 @@ function moveInDirection(dx, dy, direction, movingObject)
         end
     end
 
-
-	detectColMovingObject(rat,tom)
-    detectColMovingObject(tom,rat)
+	
 
     if collided then
         movingObject.InMotion = false
@@ -1946,6 +1966,7 @@ function moveInDirection(dx, dy, direction, movingObject)
 	end	
 	collided=false
 end
+
 
 function moveTomLeft()
 	moveInDirection( -moveSpeed, 0 , "left", tom )
