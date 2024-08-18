@@ -5,9 +5,9 @@ local scene = composer.newScene()
 
 
 gameover=false
-local function frameUpdate()--function runs once per frame
-	detectColMovingObject(rat,tom)
-end
+--local function frameUpdate()--function runs once per frame
+--	detectColMovingObject(rat,tom)
+--end
 
 function scene:create( event )
 
@@ -146,14 +146,7 @@ function hideEverything()
 	audio.stop( 1 )
 end
 
-function scene:hide( event ) 
-	local phase = event.phase
-	if ( phase == "will" ) then
-		Runtime:removeEventListener( "enterFrame", enterFrame ) 
-	elseif "did" == phase then 
-		local current =composer.getSceneName("current") 
-		composer.removeScene(current)
-		gameover=true
+function hideEverythingHacky()
 		griddle_slot1.griddle_slot_emptyImg.isVisible=false
 		griddle_slot1.griddle_slot_raw_frame1Img.isVisible=false
 		griddle_slot1.griddle_slot_raw_frame2Img.isVisible=false
@@ -278,6 +271,19 @@ function scene:hide( event )
 		myHelpButton.isVisible=false
 		--stop music
 		audio.stop( 1 )
+end
+function scene:hide( event ) 
+	local phase = event.phase
+	if ( phase == "will" ) then
+		Runtime:removeEventListener( "enterFrame", frameUpdate ) 
+		--Runtime:removeEventListener( "enterFrame", moveCharacter )
+		gameover=true
+		
+
+		local current =composer.getSceneName("current") 
+		composer.removeScene(current)
+
+	elseif "did" == phase then 
 	end
 	
 end
@@ -531,7 +537,7 @@ function scene:show( event )
 		tom.y = gridSize*10
 
 		gameover=false
-		Runtime:addEventListener( "enterFrame", frameUpdate )
+		--Runtime:addEventListener( "enterFrame", frameUpdate )
 	end
 end
 
@@ -1837,6 +1843,7 @@ function handleRatCollision(sprite)
 	if lifePerecentage <= 11 then
 		--Runtime:removeEventListener( "enterFrame", enterFrame)
 		print("Game Over")
+		hideEverythingHacky()
 		require("writeScores")
 		local totalPointsFinal = composer.getVariable( "totalPointsFinal" )
 		if totalPointsFinal==nil then
@@ -1846,7 +1853,7 @@ function handleRatCollision(sprite)
 		composer.setVariable( "totalPointsFinal", nil )
 		print("goto menu")
 		gameover=true
-		--composer.removeScene("game")
+		composer.removeScene("game")
 		--composer.removeScene( "menu" )
 		composer.gotoScene( "menu" )
 	end
@@ -2002,10 +2009,13 @@ end
 
 --handle keystrokes
 local action = {}
-function moveCharacter()
+function frameUpdate()
 	if gameover or dailyScoresScreen then
 		return
 	end
+	--detect collision between rat and tom
+	detectColMovingObject(rat,tom)
+
 	if detectCollision(tom.x-(tom.width/2), tom.y-(tom.height/2), tom.width, tom.height, pipe.x-(pipe.width/2), pipe.y-(pipe.height/2), pipe.width, pipe.height) then
 		col.text = debugVersion .. "collision:ture"
 	else
@@ -2077,7 +2087,7 @@ myHelpButton.isVisible=true
 
 
 --Runtime:addEventListener( "collision", onLocalCollision )
-Runtime:addEventListener( "enterFrame", moveCharacter )
+Runtime:addEventListener( "enterFrame", frameUpdate )
 Runtime:addEventListener( "key", onKeyEvent )
 function detectCollision(x1, y1, width1, height1, x2, y2, width2, height2) 
     if x1 + width1 > x2 and x1 < x2 + width2 and y1 + height1 > y2 and y1 < y2 + height2 then 
