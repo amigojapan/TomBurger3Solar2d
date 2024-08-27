@@ -67,26 +67,50 @@ function hideEverything()
 	dresser_table1.dresser_table_ketchupImg.isVisible=false
 	dresser_table1.dresser_table_mustardImg.isVisible=false
 	
+	dresser_table1.dresser_table_buns_with_pickles.isVisible=false
+	dresser_table1.dresser_table_buns_with_ketchup.isVisible=false
+	dresser_table1.dresser_table_buns_with_mustard.isVisible=false
+
+
 	dresser_table2.dresser_table_buns.isVisible=false
 	dresser_table2.dresser_table_emptyImg.isVisible=false
 	dresser_table2.dresser_table_ketchupImg.isVisible=false
 	dresser_table2.dresser_table_mustardImg.isVisible=false
+
+	dresser_table2.dresser_table_buns_with_pickles.isVisible=false
+	dresser_table2.dresser_table_buns_with_ketchup.isVisible=false
+	dresser_table2.dresser_table_buns_with_mustard.isVisible=false
+
 
 	dresser_table3.dresser_table_buns.isVisible=false
 	dresser_table3.dresser_table_emptyImg.isVisible=false
 	dresser_table3.dresser_table_ketchupImg.isVisible=false
 	dresser_table3.dresser_table_mustardImg.isVisible=false
 
+	dresser_table3.dresser_table_buns_with_pickles.isVisible=false
+	dresser_table3.dresser_table_buns_with_ketchup.isVisible=false
+	dresser_table3.dresser_table_buns_with_mustard.isVisible=false
+
+
 	dresser_table4.dresser_table_buns.isVisible=false
 	dresser_table4.dresser_table_emptyImg.isVisible=false
 	dresser_table4.dresser_table_ketchupImg.isVisible=false
 	dresser_table4.dresser_table_mustardImg.isVisible=false
 
+	dresser_table4.dresser_table_buns_with_pickles.isVisible=false
+	dresser_table4.dresser_table_buns_with_ketchup.isVisible=false
+	dresser_table4.dresser_table_buns_with_mustard.isVisible=false
+
+
 	dresser_table5.dresser_table_buns.isVisible=false
 	dresser_table5.dresser_table_emptyImg.isVisible=false
 	dresser_table5.dresser_table_ketchupImg.isVisible=false
 	dresser_table5.dresser_table_mustardImg.isVisible=false
-
+	
+	dresser_table5.dresser_table_buns_with_pickles.isVisible=false
+	dresser_table5.dresser_table_buns_with_ketchup.isVisible=false
+	dresser_table5.dresser_table_buns_with_mustard.isVisible=false
+	
 	pickles_tray.isVisible=false
 	cheese_tray.isVisible=false
 	wrapper_yellow.isVisible=false
@@ -209,7 +233,17 @@ function hideEverythingHacky()
 		dresser_table5.dresser_table_ketchupImg.isVisible=false
 		dresser_table5.dresser_table_mustardImg.isVisible=false
 		
+		hideDresserTableSlot(dresser_table1)
+		hideDresserTableSlot(dresser_table2)
+		hideDresserTableSlot(dresser_table3)
+		hideDresserTableSlot(dresser_table4)
+		hideDresserTableSlot(dresser_table5)
 		
+		hideGriddleSlot(griddle_slot1)
+		hideGriddleSlot(griddle_slot2)
+		hideGriddleSlot(griddle_slot3)
+		hideGriddleSlot(griddle_slot4)
+
 		pickles_tray.isVisible=false
 		cheese_tray.isVisible=false
 		wrapper_yellow.isVisible=false
@@ -261,7 +295,7 @@ function hideEverythingHacky()
 		lifeBarBlueRectangle.isVisible=false
 		col.isVisible=false
 		hideOrder()
-		if poost ~= nil then
+		if poops ~= nil then
 			for key, sprite in pairs(poops) do
 				sprite.isVisible=false
 				--poops.poop_frame1.isVisible=false
@@ -546,7 +580,7 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 --constants
-debugVersion="              debugVerion Beta18,"
+debugVersion="              debugVerion Beta28,"
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
@@ -571,6 +605,27 @@ function resizeObjectToGridSize(object,objectName)
 	table.insert(kitchen, object)
 end
 
+function hideDresserTableSlot(obj)
+	obj.dresser_table_emptyImg.isVisible=false
+	obj.dresser_table_ketchupImg.isVisible=false
+	obj.dresser_table_mustardImg.isVisible=false
+	obj.dresser_table_buns.isVisible=false
+	obj.dresser_table_buns_with_ketchup.isVisible=false
+	obj.dresser_table_buns_with_mustard.isVisible=false
+	obj.dresser_table_buns_with_pickles.isVisible=false
+	obj.dresser_table_burger.isVisible=false
+	obj.dresser_table_cheese_burger.isVisible=false
+end
+
+function hideGriddleSlot(obj)
+	obj.griddle_slot_emptyImg.isVisible=false
+	obj.griddle_slot_raw_frame1Img.isVisible=false
+	obj.griddle_slot_raw_frame2Img.isVisible=false
+	obj.griddle_slot_cooked_frame1Img.isVisible=false
+	obj.griddle_slot_cooked_frame2Img.isVisible=false
+	obj.griddle_slot_burnt_frame1Img.isVisible=false
+	obj.griddle_slot_burnt_frame2Img.isVisible=false
+end
 
 
 
@@ -1590,8 +1645,8 @@ function putPattyOnGriddle(sprite)
 		tom.waitingToGrabAgain=true
 		returnTimer = timer.performWithDelay( 500, grabTimerEnd, 0 )
 		print("Put patty on griddle")
-		tomImg.isVisible = true
-		tomWithPattyImg.isVisible=false
+		--tomImg.isVisible = true
+		--tomWithPattyImg.isVisible=false
 		sprite.griddle_slot_emptyImg.isVisible=false
 		sprite.griddle_slot_raw_frame1Img.isVisible=true
 		sprite.state="raw"
@@ -1697,7 +1752,9 @@ local function handleKitchenCollision(sprite)
 		if tomWithBunsImg.isVisible then
 			return -- hack to avoid going thru the toaster with buns
 		end
-		toast(sprite)
+		if tomImg.isVisible then
+			toast(sprite)
+		end
 	end	
 	if sprite.myName == "broom" then
 		if tomImg.isVisible then
@@ -1718,6 +1775,7 @@ local function handleKitchenCollision(sprite)
 			tomWithSpatulaCookedPattyLeftImg.isVisible=false
 			tomWithSpatulaLeftImg.isVisible=true
 			tomImg.isVisible=false
+			audio.play(putSoundEffect)
 			return			
 		end
 		if tomWithBunsImg.isVisible then
@@ -1725,6 +1783,7 @@ local function handleKitchenCollision(sprite)
 			audio.play(putSoundEffect)
 			tomWithBunsImg.isVisible=false
 			tomImg.isVisible=true
+			audio.play(putSoundEffect)
 			return
 		end
 		if tomWithPattyImg.isVisible then
@@ -1732,18 +1791,46 @@ local function handleKitchenCollision(sprite)
 			audio.play(putSoundEffect)
 			tomWithPattyImg.isVisible=false
 			tomImg.isVisible=true
+			audio.play(putSoundEffect)
 			return
 		end
-		print("broom is returned")
-		b= findSpriteInTable(kitchen,"broom")
-		b.isVisible=true
-		tomImg.isVisible = true -- tom 
-		tomWithBroomImg.isVisible = false
-		tomWithSpatulaCookedPattyLeftImg.isVisible=false
-		tomWithBunsImg.isVisible=false
-		tomWithPattyImg.isVisible=false
-		tom.holdingBroom=false
-		audio.play(putSoundEffect)
+		if 
+			tomWithBurgerImg.isVisible or 
+			tomWithCheeseBurgerImg.isVisible or 
+			tomWithCheeseImg.isVisible or
+			tomWithFriesBagImg.isVisible or
+			tomWithPicklesImg.isVisible or
+			tomWithRedWrapperImg.isVisible or
+			tomWithYellowWrapperImg.isVisible or
+			tomWithWrappedBurgerImg.isVisible or
+			tomWithWrappedCheeseBurgerImg.isVisible 
+		then
+			print("tom stuff in garbage")
+			tomWithBurgerImg.isVisible = false
+			tomWithCheeseBurgerImg.isVisible = false 
+			tomWithCheeseImg.isVisible = false
+			tomWithFriesBagImg.isVisible = false
+			tomWithPicklesImg.isVisible = false
+			tomWithRedWrapperImg.isVisible = false
+			tomWithYellowWrapperImg.isVisible = false
+			tomWithWrappedBurgerImg.isVisible = false
+			tomWithWrappedCheeseBurgerImg.isVisible = false
+			audio.play(putSoundEffect)
+			tomImg.isVisible=true
+			return
+		end
+		if tomWithBroomImg.isVisible then
+			print("broom is returned")
+			b= findSpriteInTable(kitchen,"broom")
+			b.isVisible=true
+			tomImg.isVisible = true -- tom 
+			tomWithBroomImg.isVisible = false
+			tomWithSpatulaCookedPattyLeftImg.isVisible=false
+			tomWithBunsImg.isVisible=false
+			tomWithPattyImg.isVisible=false
+			tom.holdingBroom=false
+			audio.play(putSoundEffect)				
+		end
 	end
 	print("hit sprite.myName:"..sprite.myName.."tom.waitingToGrabAgain:"..tostring(tom.waitingToGrabAgain))
 	if
@@ -1828,6 +1915,8 @@ local function handlePoopCollision(sprite)
 			sprite.isVisible = false --will need to check for this when reducing tom's life , it must be true
 		else
 			if sprite.isVisible then
+				audio.play(notSoundEffect)	
+				handleRatCollision(sprite)--hack to get it to do the same as colliding with rat, may change later
 			end
 		end
 	end
@@ -1839,23 +1928,27 @@ function onCompletecallback(obj)
 end
 
 function handleRatCollision(sprite)
-	lifePerecentage=lifePerecentage-30
+	lifePerecentage=lifePerecentage-0.5
 	if lifePerecentage <= 11 then
 		--Runtime:removeEventListener( "enterFrame", enterFrame)
 		print("Game Over")
+		hideOrder()
+		hideOrderSlip()
 		hideEverythingHacky()
 		require("writeScores")
 		local totalPointsFinal = composer.getVariable( "totalPointsFinal" )
 		if totalPointsFinal==nil then
 			totalPointsFinal=0
 		end
-		writeScore("\n"..tostring(totalPointsFinal), difficulty)
+		--writeScore("\n"..tostring(totalPointsFinal), difficulty)
 		composer.setVariable( "totalPointsFinal", nil )
+		sentScores()
+		composer.setVariable( "gameIsOver", true )
 		print("goto menu")
 		gameover=true
 		composer.removeScene("game")
 		--composer.removeScene( "menu" )
-		composer.gotoScene( "menu" )
+		composer.gotoScene( "dailyScoresScreen" )
 	end
 end
 
@@ -1936,23 +2029,6 @@ function moveInDirection(dx, dy, direction, movingObject)
         end
     end
 
-    for key, sprite in pairs(poops) do
-        if detectCollision(
-                movingObject.x - (movingObject.width / 2),
-                movingObject.y - (movingObject.height / 2), 
-                movingObject.width, movingObject.height,
-                sprite.x - (sprite.width / 2),
-                sprite.y - (sprite.height / 2),
-                sprite.width, sprite.height
-            ) then
-            if movingObject.myName == "tom" then
-                -- happens when tom moves
-                col.text = debugVersion .. "collision:true"
-                handlePoopCollision(sprite)
-            end
-			--collided = true
-        end
-    end
 
 	
 
@@ -2007,6 +2083,25 @@ function moveRatDown()
 	moveInDirection( 0, moveSpeed, "down", rat )
 end
 
+function detectPoopCollisions(movingObject)
+	for key, sprite in pairs(poops) do
+        if detectCollision(
+                movingObject.x - (movingObject.width / 2),
+                movingObject.y - (movingObject.height / 2), 
+                movingObject.width, movingObject.height,
+                sprite.x - (sprite.width / 2),
+                sprite.y - (sprite.height / 2),
+                sprite.width, sprite.height
+            ) then
+            if movingObject.myName == "tom" then
+                -- happens when tom moves
+                col.text = debugVersion .. "collision:true"
+                handlePoopCollision(sprite)
+            end
+			--collided = true
+        end
+    end
+end
 --handle keystrokes
 local action = {}
 function frameUpdate()
@@ -2015,6 +2110,8 @@ function frameUpdate()
 	end
 	--detect collision between rat and tom
 	detectColMovingObject(rat,tom)
+
+		detectPoopCollisions(tom)
 
 	if detectCollision(tom.x-(tom.width/2), tom.y-(tom.height/2), tom.width, tom.height, pipe.x-(pipe.width/2), pipe.y-(pipe.height/2), pipe.width, pipe.height) then
 		col.text = debugVersion .. "collision:ture"
@@ -2051,23 +2148,35 @@ end
 --help button
 webView=nil
 function myHelpTouchListener( event )
-    if ( event.phase == "began" ) then
-        print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
-		if webView==nil or webView.isVisible==false then 
-			webView = native.newWebView( display.contentCenterX, display.contentCenterY, 1000-gridSize*4, 800-gridSize*2 )
-			language=composer.getVariable( "language" )
-			print("langauge:"..language)
-			if language == "English" then
-				webView:request( "https://amjp.psy-k.org/tom-burger/docs-en.html" )
-			elseif language == "Japanese" then
-				webView:request( "https://amjp.psy-k.org/tom-burger/docs-jp.html" )
-			elseif  language == "Spanish" then
-				webView:request( "https://amjp.psy-k.org/tom-burger/docs-es.html" )
+	if system.getInfo("platform")=="android" then
+		if ( event.phase == "began" ) then
+			print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
+			if webView==nil or webView.isVisible==false then 
+				webView = native.newWebView( display.contentCenterX, display.contentCenterY, 1000-gridSize*4, 800-gridSize*2 )
+				language=composer.getVariable( "language" )
+				print("langauge:"..language)
+				if language == "English" then
+					webView:request( "https://amjp.psy-k.org/tom-burger/docs-en.html" )
+				elseif language == "Japanese" then
+					webView:request( "https://amjp.psy-k.org/tom-burger/docs-jp.html" )
+				elseif  language == "Spanish" then
+					webView:request( "https://amjp.psy-k.org/tom-burger/docs-es.html" )
+				end
+				webView.isVisible=true
+			else 
+				webView.isVisible=false
 			end
-			webView.isVisible=true
-		else 
-			webView.isVisible=false
 		end
+		return
+	end
+	language=composer.getVariable( "language" )
+	print("langauge:"..language)
+	if language == "English" then
+		system.openURL( "https://amjp.psy-k.org/tom-burger/docs-en.html" )
+	elseif language == "Japanese" then
+		system.openURL( "https://amjp.psy-k.org/tom-burger/docs-jp.html" )
+	elseif  language == "Spanish" then
+		system.openURL( "https://amjp.psy-k.org/tom-burger/docs-es.html" )
 	end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
@@ -2083,7 +2192,12 @@ myHelpButton = display.newRect(offsetx, offsety, gridSize, gridSize )
 myHelpButton.fill = paint
 
 myHelpButton:addEventListener( "touch", myHelpTouchListener )  -- Add a "touch" listener to the obj
-myHelpButton.isVisible=true
+if system.getInfo("platform")=="html5" then
+	myHelpButton.isVisible=false
+else
+	myHelpButton.isVisible=true
+end
+
 
 
 --Runtime:addEventListener( "collision", onLocalCollision )
@@ -2101,6 +2215,9 @@ local fireTimer
 
 function myLeftTouchListener( event )
     if ( event.phase == "began" ) then
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
 		moveTomLeft()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomLeft, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
@@ -2123,6 +2240,9 @@ myLeftButton:addEventListener( "touch", myLeftTouchListener )  -- Add a "touch" 
 
 function myRightTouchListener( event )
     if ( event.phase == "began" ) then
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
 		moveTomRight()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomRight, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
@@ -2141,6 +2261,9 @@ myRightButton:addEventListener( "touch", myRightTouchListener )  -- Add a "touch
 
 local function myUpTouchListener( event )
     if ( event.phase == "began" ) then
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
 		moveTomUp()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomUp, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
@@ -2159,6 +2282,9 @@ myUpButton:addEventListener( "touch", myUpTouchListener )  -- Add a "touch" list
 
 local function myDownTouchListener( event )
     if ( event.phase == "began" ) then
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
 		moveTomDown()
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomDown, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
@@ -2255,6 +2381,25 @@ hours=8
 print(hours .. "H left")
 dailyScoresScreen=false
 cleanlynessPoints=0
+pointsPerCleanlyness=40
+function sentScores()
+	composer.setVariable( "burgersMade", ordersTray.burgersMade )
+	composer.setVariable( "cheeseBurgersMade", ordersTray.cheeseBurgersMade )
+	composer.setVariable( "frenchFriesMade", readyFriesAmmountInGrams/100 )
+	composer.setVariable( "ordersBurgers", orders.burgers )
+	composer.setVariable( "ordersCheeseBurgers", orders.cheeseBurgers )
+	composer.setVariable( "ordersFrenchFries", orders.frenchFries )
+	for key, sprite in pairs(poops) do
+		if(sprite.isVisible) then
+			cleanlynessPoints=cleanlynessPoints-pointsPerCleanlyness
+		else
+			cleanlynessPoints=cleanlynessPoints+pointsPerCleanlyness
+		end
+		sprite.isVisible=false
+	end
+	composer.setVariable( "cleanlynessPoints", cleanlynessPoints )
+	dailyScoresScreen=true
+end
 function oneHourOver()
 	if gameover or dailyScoresScreen then
 		return
@@ -2263,22 +2408,7 @@ function oneHourOver()
 	if hours == 0 then
 		print("Workday over!")
 		print("bugers made:" .. ordersTray.burgersMade)
-		composer.setVariable( "burgersMade", ordersTray.burgersMade )
-		composer.setVariable( "cheeseBurgersMade", ordersTray.cheeseBurgersMade )
-		composer.setVariable( "frenchFriesMade", readyFriesAmmountInGrams/100 )
-		composer.setVariable( "ordersBurgers", orders.burgers )
-		composer.setVariable( "ordersCheeseBurgers", orders.cheeseBurgers )
-		composer.setVariable( "ordersFrenchFries", orders.frenchFries )
-		for key, sprite in pairs(poops) do
-			if(sprite.isVisible) then
-				cleanlynessPoints=cleanlynessPoints-100
-			else
-				cleanlynessPoints=cleanlynessPoints+100
-			end
-			sprite.isVisible=false
-		end
-		composer.setVariable( "cleanlynessPoints", cleanlynessPoints )
-		dailyScoresScreen=true
+		sentScores()
 		composer.removeScene("game")
 		hideEverything()
 		--reset values
@@ -2310,7 +2440,7 @@ function oneHourOver()
 			timer.cancel(fireRatTimer)
 		end 
 		poops=nil
-		
+		composer.setVariable( "gameIsOver", false )
 		composer.gotoScene( "dailyScoresScreen" )
 	end
 	labelTimeLeft.text = translate["Nokori"] .. tostring(hours) .. translate["Punkan"]
@@ -2504,10 +2634,17 @@ return scene
 --also complete these details:
 --(done)you may get rid of some items you are holding by throwing them in the trash can
 --(done I think)bug, cant throw away a patty
---bug, seems there is still problems in the touch controls where tom gets stuck moving in a direction
 --(done)add a web view for the help for how to play
 --(done)add new images to menu (with alpha 50 black rectangla)
---make an order appear first a little after the game starts 
+--(done)make an order appear first a little after the game starts 
 --tune difficulty settings
 --(hacked,reverted to the previous bug where the language does not change by putting the menu creation on the create event of the difficulty menu)new bug, game wont start for a second time (after changing language?)
---save and display score screen
+--(done)save and display score screen
+--(seems it is fixed, but I dont know why)bug the game wont restart in the simulator after it ends if you click on the ? in game
+--(semi fixed,still hard to control)bug, seems there is still problems in the touch controls where tom gets stuck moving in a direction
+	--(done)a possible solution is to put cancel timer in the begin phase of everu button press
+--(done)hide griddle function, just like I did for dresser table
+--(done)add game over screen
+--(done)add back buttons in possible screens
+--(done)add score to game over before time up
+--(done)make it possible to carry many patties at once

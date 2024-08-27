@@ -35,7 +35,18 @@ function getScoreTable(difficulty)
 
     table.sort(lines, function(a,b) return a > b end)--reverse order sort
     print("list sorted in reverse order")
-    return lines
+    --local test = {1,2,4,2,3,4,2,3,4,"A", "B", "A"}
+    local hash = {}
+    local res = {}
+
+    for _,v in ipairs(lines) do
+      if (not hash[v]) then
+          res[#res+1] = v -- you could print here instead of saving to result table if you wanted
+          hash[v] = true
+      end
+    end
+
+    return res
 end
 --use following to read it
 --for k,v in pairs(lines) do

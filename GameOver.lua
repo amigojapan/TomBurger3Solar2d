@@ -1,6 +1,4 @@
-
 require("i18n_dict")
-require("writeScores")
 local composer = require( "composer" )
 
 local scene = composer.newScene()
@@ -10,17 +8,22 @@ local scene = composer.newScene()
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
+print( "ORIENTATION: "..system.orientation )
+
 local function gotoMenu()
 	composer.gotoScene( "menu" )
 end
-
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
 
 -- create()
-function updateScene(sceneGroup)
+function scene:create( event )
+
+	local sceneGroup = self.view
+	-- Code here runs when the scene is first created but has not yet appeared on screen
+
 	local background = display.newImageRect( sceneGroup, "backgrounds/background.png", 1400,800 )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
@@ -28,42 +31,18 @@ function updateScene(sceneGroup)
 	ordersRectangle.strokeWidth = 5
 	ordersRectangle:setFillColor( 0, 0 , 0, 0.5 )
 	ordersRectangle:setStrokeColor( 1, 0, 0 )
-	offsetY=200
-	offsetX=200
-	local lableTotalPoints = display.newText( sceneGroup, "Easy" , offsetY, offsetX, "fonts/ume-tgc5.ttf", 50 )
-	lines=getScoreTable(1)
-	for k,v in pairs(lines) do
-		offsetX=offsetX+55
-		display.newText( sceneGroup, v  , offsetY, offsetX, "fonts/ume-tgc5.ttf", 50 )
-	    print('line[' .. k .. '] offsetX:'..offsetX.."offsetY:"..offsetY, v)
-	end
-	offsetY=500
-	offsetX=200
-	lines=getScoreTable(2)
-	local lableTotalPoints = display.newText( sceneGroup, "Medium", offsetY, offsetX, "fonts/ume-tgc5.ttf", 50 )
-	for k,v in pairs(lines) do
-		offsetX=offsetX+55
-		local lableTotalPoints = display.newText( sceneGroup, v  , offsetY, offsetX, "fonts/ume-tgc5.ttf", 50 )
-	    print('line[' .. k .. ']', v)
-	end
-	offsetY=800
-	offsetX=200
-	lines=getScoreTable(3)
-	local lableTotalPoints = display.newText( sceneGroup, "Hard" , offsetY, offsetX, "fonts/ume-tgc5.ttf", 50 )
-	for k,v in pairs(lines) do
-		offsetX=offsetX+55
-		local lableTotalPoints = display.newText( sceneGroup, v  , offsetY, offsetX, "fonts/ume-tgc5.ttf", 50 )
-	    print('line[' .. k .. ']', v)
-	end
-	local playButton = display.newText( sceneGroup, "<<", 300, 50, "fonts/ume-tgc5.ttf", 44 )
-	playButton:setFillColor( 0.82, 0.86, 1 )
-	playButton:addEventListener( "tap", gotoMenu )
-end
-function scene:create( event )
-	local sceneGroup = self.view
-	-- Code here runs when the scene is first created but has not yet appeared on screen
+	story = display.newImageRect( sceneGroup, "backgrounds/GameOver.png", 1000,800 )
+	story.x = display.contentCenterX
+	story.y = display.contentCenterY
 
-	
+	--local lblTitle = display.newText( sceneGroup, "Story", display.contentCenterX, 50, "fonts/ume-tgc5.ttf", 75 )
+	--lblTitle:setFillColor( 0.82, 0.86, 1 )
+	local totalPointsFinal = composer.getVariable( "totalPointsFinal" )
+	writeScore("\n"..tostring(totalPointsFinal), difficulty)
+	local highScoresButton = display.newText( sceneGroup, "OK", display.contentCenterX, 720, "fonts/ume-tgc5.ttf", 44 )
+	highScoresButton:setFillColor( 0.75, 0.78, 1 )
+
+	highScoresButton:addEventListener( "tap", gotoMenu )
 end
 
 
@@ -78,7 +57,8 @@ function scene:show( event )
 		
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
-		updateScene(sceneGroup)
+		print("Removed scene")
+		composer.removeScene( "game" )
 	end
 end
 

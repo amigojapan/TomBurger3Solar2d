@@ -7,6 +7,9 @@ local scene = composer.newScene()
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
+local function gotoMenu()
+	composer.gotoScene( "menu" )
+end
 
 print( "ORIENTATION: "..system.orientation )
 
@@ -82,7 +85,10 @@ function scene:show( event )
 	startButtonSpanish:setFillColor( 0.82, 0.86, 1 )
 	startButtonSpanish:addEventListener( "tap", gotoGameSpanish )
 
-	
+	local playButton = display.newText( sceneGroup, "<<", 300, 50, "fonts/ume-tgc5.ttf", 44 )
+	playButton:setFillColor( 0.82, 0.86, 1 )
+	playButton:addEventListener( "tap", gotoMenu )
+
 	end
 end
 

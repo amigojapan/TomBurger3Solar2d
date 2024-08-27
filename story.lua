@@ -8,12 +8,16 @@ local scene = composer.newScene()
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
+
 print( "ORIENTATION: "..system.orientation )
 
 local function gotoStart()
 	composer.gotoScene( "game" )
 end
 
+local function gotoDifficulty()
+	composer.gotoScene( "difficulty" )
+end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -46,8 +50,12 @@ function scene:create( event )
 
 	local highScoresButton = display.newText( sceneGroup, "Start!", display.contentCenterX, 720, "fonts/ume-tgc5.ttf", 44 )
 	highScoresButton:setFillColor( 0.75, 0.78, 1 )
-
 	highScoresButton:addEventListener( "tap", gotoStart )
+
+	local playButton = display.newText( sceneGroup, "<<", 300, 50, "fonts/ume-tgc5.ttf", 44 )
+	playButton:setFillColor( 0.82, 0.86, 1 )
+	playButton:addEventListener( "tap", gotoDifficulty )
+
 end
 
 

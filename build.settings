@@ -5,6 +5,11 @@
 
 settings =
 {
+    splashScreen = 
+    {
+        enable = true,
+        image = "backgrounds/background.png"
+    },
 	orientation =
 	{
 		-- Supported values for orientation:

@@ -15,6 +15,13 @@ local function gotoGame()
 	composer.gotoScene( "game" )
 end
 
+local function gotoGameOver()
+	print("goto GAME OVER screen")
+	composer.removeScene( "game" )
+	composer.gotoScene( "GameOver" )
+end
+
+
 local function gotoHighScores()
 	composer.gotoScene( "highscores" )
 end
@@ -50,7 +57,11 @@ function updateScene(sceneGroup)
 	bonus=0
 	offsetY=100
 	--**burgers
-	Points=burgersMade * 30
+	pointsPerCompletedOrder=60
+	negaitvePointsPerWaste=60
+	negaitvePointsPerIncompleteOrder=60
+	bonusForPerfectBalance=500
+	Points=burgersMade * pointsPerCompletedOrder
 	local lableBurgersMade = display.newText( sceneGroup, translate["Made Hamburgers"] .. burgersMade .. "✔" .. tostring(Points) .. "pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 	lableBurgersMade:setTextColor( 1, 1, 0 )
 	offsetY=offsetY+55
@@ -58,15 +69,15 @@ function updateScene(sceneGroup)
 	lableOrdersBurgers:setTextColor( 1, 1, 0 )
 	offsetY=offsetY+55
 	if ordersBurgers < burgersMade then
-		wastePoints=(ordersBurgers - burgersMade)*30
+		wastePoints=(ordersBurgers - burgersMade)*negaitvePointsPerWaste
 		local lableWastedHamburgers = display.newText( sceneGroup, translate["Waste"] .. tostring(wastePoints).."pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lableWastedHamburgers:setTextColor( 1, 0, 0 )
 	elseif ordersBurgers > burgersMade then
-		inclmpleteOderPoints=(burgersMade - ordersBurgers)*50
+		inclmpleteOderPoints=(burgersMade - ordersBurgers)*negaitvePointsPerIncompleteOrder
 		local lableIncompleteOrders = display.newText( sceneGroup, translate["Incomplete Orders"] .. tostring(inclmpleteOderPoints).."pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lableIncompleteOrders:setTextColor( 1, 0, 0 )
 	else
-		bonus=500
+		bonus=500--for perfect balance
 		local lablePerfectBalanceBonus = display.newText( sceneGroup, translate["Perfect Balance Bonus"] .. "500pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lablePerfectBalanceBonus:setTextColor( 1, 1, 0 )
 	end
@@ -76,23 +87,27 @@ function updateScene(sceneGroup)
 	inclmpleteOderPoints=0
 	bonus=0
 	--**Cheeseburgers
+	pointsPerCompletedOrder=65
+	negaitvePointsPerWaste=65
+	negaitvePointsPerIncompleteOrder=65
+	bonusForPerfectBalance=500
 	offsetY=offsetY+55
-	local lableCheeseBurgersMade = display.newText( sceneGroup, translate["Made Cheeseburgers"] .. cheeseBurgersMade .. "✔" .. tostring(cheeseBurgersMade * 30) .. "pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
+	local lableCheeseBurgersMade = display.newText( sceneGroup, translate["Made Cheeseburgers"] .. cheeseBurgersMade .. "✔" .. tostring(cheeseBurgersMade * pointsPerCompletedOrder) .. "pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 	lableCheeseBurgersMade:setTextColor( 1, 1, 0 )
 	offsetY=offsetY+55
 	local lableOrdersCheeseBurgers = display.newText( sceneGroup, translate["Odered Cheeseburgers"] .. ordersCheeseBurgers , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 	lableOrdersCheeseBurgers:setTextColor( 1, 1, 0 )
 	offsetY=offsetY+55
 	if ordersCheeseBurgers < cheeseBurgersMade then
-		wastePoints=(ordersCheeseBurgers - cheeseBurgersMade)*30
+		wastePoints=(ordersCheeseBurgers - cheeseBurgersMade)*negaitvePointsPerWaste
 		local lableWastedCheeseBurgers = display.newText( sceneGroup, translate["Waste"] .. tostring(wastePoints).."pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lableWastedCheeseBurgers:setTextColor( 1, 0, 0 )
 	elseif ordersCheeseBurgers > cheeseBurgersMade then
-		inclmpleteOderPoints=(cheeseBurgersMade - ordersCheeseBurgers)*50
+		inclmpleteOderPoints=(cheeseBurgersMade - ordersCheeseBurgers)*negaitvePointsPerIncompleteOrder
 		local lableIncompleteOrdersCB = display.newText( sceneGroup, translate["Incomplete Orders"] .. tostring(inclmpleteOderPoints).."pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lableIncompleteOrdersCB:setTextColor( 1, 0, 0 )
 	else
-		bonus=500
+		bonus=bonusForPerfectBalance
 		local lablePerfectBalanceBonusCB = display.newText( sceneGroup, translate["Perfect Balance Bonus"] .. "500pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lablePerfectBalanceBonusCB:setTextColor( 1, 1, 0 )
 	end
@@ -102,23 +117,28 @@ function updateScene(sceneGroup)
 	inclmpleteOderPoints=0
 	bonus=0
 	--**frenchFries
+	pointsPerCompletedOrder=30
+	negaitvePointsPerWaste=10
+	negaitvePointsPerIncompleteOrder=30
+	bonusForPerfectBalance=500
+
 	offsetY=offsetY+55
-	local lableFrenchFriesMade = display.newText( sceneGroup, translate["Made Frenchfries"] .. frenchFriesMade .. "✔" .. tostring(frenchFriesMade * 10) .. "pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
+	local lableFrenchFriesMade = display.newText( sceneGroup, translate["Made Frenchfries"] .. frenchFriesMade .. "✔" .. tostring(frenchFriesMade * pointsPerCompletedOrder) .. "pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 	lableFrenchFriesMade:setTextColor( 1, 1, 0 )
 	offsetY=offsetY+55
 	local lableordersFrenchFries = display.newText( sceneGroup, translate["Odered Frenchfries"] .. ordersFrenchFries , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 	lableordersFrenchFries:setTextColor( 1, 1, 0 )
 	offsetY=offsetY+55
 	if ordersFrenchFries < frenchFriesMade then
-		wastePoints=(ordersFrenchFries - frenchFriesMade)*10
+		wastePoints=(ordersFrenchFries - frenchFriesMade)*negaitvePointsPerWaste
 		local lableWastedFF = display.newText( sceneGroup, translate["Waste"] .. tostring(wastePoints).."pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lableWastedFF:setTextColor( 1, 0, 0 )
 	elseif ordersFrenchFries > frenchFriesMade then
-		inclmpleteOderPoints=(frenchFriesMade - ordersFrenchFries)*20
+		inclmpleteOderPoints=(frenchFriesMade - ordersFrenchFries)*negaitvePointsPerIncompleteOrder
 		local lableIncompleteOrdersFF = display.newText( sceneGroup, translate["Incomplete Orders"] .. tostring(inclmpleteOderPoints).."pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lableIncompleteOrdersFF:setTextColor( 1, 0, 0 )
 	else
-		bonus=500
+		bonus=bonusForPerfectBalance
 		local lablePerfectBalanceBonusFF = display.newText( sceneGroup, translate["Perfect Balance Bonus"] .. "500pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
 		lablePerfectBalanceBonusFF:setTextColor( 1, 1, 0 )
 	end
@@ -169,9 +189,16 @@ function updateScene(sceneGroup)
 --translate=i18n_setlang("Japanese")
 --print(translate["hw"])
 --print(translate["gw"])
-	local playButton = display.newText( sceneGroup, "Start", 100, 100, "fonts/ume-tgc5.ttf", 44 )
-	playButton:setFillColor( 0.82, 0.86, 1 )
-	playButton:addEventListener( "tap", gotoGame )
+	local gameIsOver = composer.getVariable( "gameIsOver" )
+	if gameIsOver then
+		local playButton = display.newText( sceneGroup, "OK", 100, 100, "fonts/ume-tgc5.ttf", 44 )
+		playButton:setFillColor( 0.82, 0.86, 1 )
+		playButton:addEventListener( "tap", gotoGameOver )	
+	else
+		local playButton = display.newText( sceneGroup, "OK", 100, 100, "fonts/ume-tgc5.ttf", 44 )
+		playButton:setFillColor( 0.82, 0.86, 1 )
+		playButton:addEventListener( "tap", gotoGame )
+	end
 end
 function scene:create( event )
 	local sceneGroup = self.view
