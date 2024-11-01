@@ -166,6 +166,7 @@ function hideEverything()
 	for key, sprite in pairs(poops) do
 		poops.isVisible=false
 	end
+	myHelpButton.isVisible=false
 	--stop music
 	audio.stop( 1 )
 end
@@ -580,7 +581,7 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 --constants
-debugVersion="              debugVerion Beta28,"
+debugVersion="              debugVerion Beta39,trial,"
 gridSize=64
 moveSpeed = gridSize
 timeForMoveInMilliseconds=500
@@ -592,9 +593,7 @@ local gridHeight = display.contentHeight
 --globals
 poops={}
 lifePerecentage=100
-if difficulty == 1 or difficulty == 2 or difficulty == 3 then
-	millisecondsPerHour=60000	--change this to 60 later
-end
+millisecondsPerHour=60000	--change this to 60 later
 
 
 --layout kitchen
@@ -834,14 +833,20 @@ function randomOrder()
 	end
 	textOffsetX=gridSize*8
 	textOffsetY=64*2.3
-	if difficulty == 1  or difficulty == 2 then
+	if difficulty == 1 then
+		hamburgerCount=math.random(0,1)
+		cheeseBurgerCount=math.random(0,1)
+		frenchFryCount=math.random(0,1)		
+	end
+	if  difficulty == 2 then
 		hamburgerCount=math.random(1,2)
 		cheeseBurgerCount=math.random(1,2)
 		frenchFryCount=math.random(1,2)
-	else
-		hamburgerCount=math.random(1,5)
-		cheeseBurgerCount=math.random(1,5)
-		frenchFryCount=math.random(1,5)
+	end
+	if  difficulty == 3 then
+		hamburgerCount=math.random(1,3)
+		cheeseBurgerCount=math.random(1,3)
+		frenchFryCount=math.random(1,3)
 	end
 	orders.burgers=orders.burgers+hamburgerCount
 	orders.cheeseBurgers=orders.cheeseBurgers+cheeseBurgerCount
@@ -996,7 +1001,7 @@ end
 local returnTimer
 function grabTimerEnd()
 	tom.waitingToGrabAgain=false
-	if(returnTimer) then
+	if returnTimer then
 		timer.cancel( returnTimer )
 	end
 end
@@ -2163,8 +2168,12 @@ function myHelpTouchListener( event )
 					webView:request( "https://amjp.psy-k.org/tom-burger/docs-es.html" )
 				end
 				webView.isVisible=true
+				myHelpButton.isVisible=false
+				myHelpCloseButton.isVisible=true
 			else 
 				webView.isVisible=false
+				myHelpButton.isVisible=true
+				myHelpCloseButton.isVisible=false
 			end
 		end
 		return
@@ -2192,6 +2201,16 @@ myHelpButton = display.newRect(offsetx, offsety, gridSize, gridSize )
 myHelpButton.fill = paint
 
 myHelpButton:addEventListener( "touch", myHelpTouchListener )  -- Add a "touch" listener to the obj
+
+local paint = {
+    type = "image",
+    filename = "img/How_to_play_close.png"
+}
+myHelpCloseButton = display.newRect(offsetx, offsety, gridSize, gridSize )
+myHelpCloseButton.fill = paint
+
+myHelpCloseButton:addEventListener( "touch", myHelpTouchListener )  -- Add a "touch" listener to the obj
+myHelpCloseButton.isVisible=false
 if system.getInfo("platform")=="html5" then
 	myHelpButton.isVisible=false
 else
@@ -2210,8 +2229,50 @@ function detectCollision(x1, y1, width1, height1, x2, y2, width2, height2)
         return false
     end
 end
-
 local fireTimer
+
+currentButton=nil
+function isWithinBounds( object, event )
+	local bounds = object.contentBounds
+    local x, y = event.x, event.y
+	local isWithinBounds = true
+		
+	if "table" == type( bounds ) then
+		if "number" == type( x ) and "number" == type( y ) then
+			isWithinBounds = bounds.xMin <= x and bounds.xMax >= x and bounds.yMin <= y and bounds.yMax >= y
+		end
+	end
+	print("isWithinBounds:"..tostring(isWithinBounds))
+	return  isWithinBounds
+end
+
+local function onMouseEvent( event )
+	-- Print the mouse cursor's current position to the log.
+	if currentButton then
+		if isWithinBounds(currentButton, event) == false then
+			if fireTimer then
+				timer.cancel( fireTimer )
+			end
+		end
+	end
+	--local message = "Mouse Position = (" .. tostring(event.x) .. "," .. tostring(event.y) .. ")"
+    --print( message )
+end
+                              
+-- Add the mouse event listener.
+Runtime:addEventListener( "mouse", onMouseEvent )
+
+local function t( event )
+	if currentButton then
+		if isWithinBounds(currentButton, event) == false then
+			if fireTimer then
+				timer.cancel( fireTimer )
+			end
+		end
+	end
+end
+ 
+Runtime:addEventListener( "touch", t )
 
 function myLeftTouchListener( event )
     if ( event.phase == "began" ) then
@@ -2219,10 +2280,17 @@ function myLeftTouchListener( event )
 			timer.cancel( fireTimer )
 		end
 		moveTomLeft()
+		currentButton=myLeftButton
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomLeft, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
+	elseif ( event.phase == "moved" ) then
+		--if isWithinBounds(myLeftButton, event) == false then
+		--	timer.cancel( fireTimer )
+		--end
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
-		timer.cancel( fireTimer )
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
     end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
@@ -2244,11 +2312,20 @@ function myRightTouchListener( event )
 			timer.cancel( fireTimer )
 		end
 		moveTomRight()
+		currentButton=myRightButton
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomRight, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
+	elseif ( event.phase == "moved" ) then
+		if isWithinBounds(myRightButton, event) == false then
+			if fireTimer then
+				timer.cancel( fireTimer )
+			end
+		end
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
-		timer.cancel( fireTimer )
-	end
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
+    end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
 local paint = {
@@ -2265,10 +2342,19 @@ local function myUpTouchListener( event )
 			timer.cancel( fireTimer )
 		end
 		moveTomUp()
+		currentButton=myUpButton
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomUp, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
+	elseif ( event.phase == "moved" ) then
+		if isWithinBounds(myUpButton, event) == false then
+			if fireTimer then
+				timer.cancel( fireTimer )
+			end
+		end
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
-		timer.cancel( fireTimer )
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
     end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
@@ -2286,10 +2372,19 @@ local function myDownTouchListener( event )
 			timer.cancel( fireTimer )
 		end
 		moveTomDown()
+		currentButton=myDownButton
 		fireTimer = timer.performWithDelay( timeForMoveInMilliseconds+100, moveTomDown, 0 )
         print( "object touched = " .. tostring(event.target) )  -- "event.target" is the touched object
+	elseif ( event.phase == "moved" ) then
+		if isWithinBounds(myDownButton, event) == false then
+			if fireTimer then
+				timer.cancel( fireTimer )
+			end
+		end
 	elseif ( event.phase == "ended" or event.phase == "moved" or event.phase == "cancelled") then
-		timer.cancel( fireTimer )
+		if fireTimer then
+			timer.cancel( fireTimer )
+		end
     end
     return true  -- Prevents tap/touch propagation to underlying objects
 end
@@ -2330,13 +2425,13 @@ function oirderTimeSet()
 	end
 	if difficulty == 1 then
 		print("difficulty 1")
-		orderWaitTime=math.random(100000, 200000)
+		orderWaitTime=1800000
 	elseif difficulty == 2 then
 		print("difficulty 2")
-		orderWaitTime=math.random(50000, 100000)
+		orderWaitTime=math.random(200000, 400000)
 	elseif difficulty == 3 then
 		print("difficulty 3")
-		orderWaitTime=math.random(10000, 20000)				
+		orderWaitTime=math.random(100000, 200000)				
 	end
 	if orderTimer ~= nil then
 		timer.cancel(orderTimer)
@@ -2648,3 +2743,6 @@ return scene
 --(done)add back buttons in possible screens
 --(done)add score to game over before time up
 --(done)make it possible to carry many patties at once
+--make negative points go down the worse they are, probably by converting the table to numbers before sorting it
+--(I think this is fixed)bug, misteriously canceling some timer in the android version makes it crash
+--	I will try to add if timervar then timer.cancel for every instance of timervars to try to fix this

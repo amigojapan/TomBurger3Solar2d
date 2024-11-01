@@ -7,16 +7,16 @@ local scene = composer.newScene()
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
-
+url=nil
 
 print( "ORIENTATION: "..system.orientation )
 
-local function gotoStart()
-	composer.gotoScene( "game" )
+local function gotoMenu()
+	composer.gotoScene( "menu" )
 end
 
-local function gotoDifficulty()
-	composer.gotoScene( "difficulty" )
+local function gotoURL()
+	system.openURL( url )
 end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -37,25 +37,28 @@ function scene:create( event )
 	ordersRectangle:setStrokeColor( 1, 0, 0 )
 	language=composer.getVariable( "language" )
 	if language=="English" then
-		story = display.newImageRect( sceneGroup, "backgrounds/storyEnglish.png", 1000,800 )
+		story = display.newImageRect( sceneGroup, "backgrounds/trialEndEnglish.png", 1000,800 )
+		url="https://amjp.psy-k.org/tom-burger/Play-Tom-Burger-HTML5.html"
 	elseif language=="Japanese" then
-		story = display.newImageRect( sceneGroup, "backgrounds/storyJapanese.png", 1000,800 )
+		story = display.newImageRect( sceneGroup, "backgrounds/trialEndJapanese.png", 1000,800 )
+		url="https://amjp.psy-k.org/tom-burger//Play-Tom-Burger-HTML5-jp.html"
 	elseif language=="Spanish" then
-		story = display.newImageRect( sceneGroup, "backgrounds/storySpanish.png", 1000,800 )
+		story = display.newImageRect( sceneGroup, "backgrounds/trialEndSpanish.png", 1000,800 )
+		url="https://amjp.psy-k.org/tom-burger//Play-Tom-Burger-HTML5-es.html"
 	end
 	story.x = display.contentCenterX
 	story.y = display.contentCenterY
 
-	local lblTitle = display.newText( sceneGroup, "Story", display.contentCenterX, 50, "fonts/ume-tgc5.ttf", 75 )
+	local lblTitle = display.newText( sceneGroup, "Trial end", display.contentCenterX, 50, "fonts/ume-tgc5.ttf", 75 )
 	lblTitle:setFillColor( 0.82, 0.86, 1 )
 
-	local highScoresButton = display.newText( sceneGroup, "Start!", display.contentCenterX, 720, "fonts/ume-tgc5.ttf", 44 )
+	local highScoresButton = display.newText( sceneGroup, "purchase, 購入、comprar", display.contentCenterX, 720, "fonts/ume-tgc5.ttf", 44 )
 	highScoresButton:setFillColor( 0.75, 0.78, 1 )
-	highScoresButton:addEventListener( "tap", gotoStart )
+	highScoresButton:addEventListener( "tap", gotoURL )
 
 	local playButton = display.newText( sceneGroup, "<<", 300, 50, "fonts/ume-tgc5.ttf", 44 )
 	playButton:setFillColor( 0.82, 0.86, 1 )
-	playButton:addEventListener( "tap", gotoDifficulty )
+	playButton:addEventListener( "tap", gotoMenu )
 
 end
 

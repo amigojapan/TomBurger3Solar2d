@@ -57,9 +57,9 @@ function updateScene(sceneGroup)
 	bonus=0
 	offsetY=100
 	--**burgers
-	pointsPerCompletedOrder=60
-	negaitvePointsPerWaste=60
-	negaitvePointsPerIncompleteOrder=60
+	pointsPerCompletedOrder=80
+	negaitvePointsPerWaste=30
+	negaitvePointsPerIncompleteOrder=30
 	bonusForPerfectBalance=500
 	Points=burgersMade * pointsPerCompletedOrder
 	local lableBurgersMade = display.newText( sceneGroup, translate["Made Hamburgers"] .. burgersMade .. "✔" .. tostring(Points) .. "pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
@@ -87,9 +87,9 @@ function updateScene(sceneGroup)
 	inclmpleteOderPoints=0
 	bonus=0
 	--**Cheeseburgers
-	pointsPerCompletedOrder=65
-	negaitvePointsPerWaste=65
-	negaitvePointsPerIncompleteOrder=65
+	pointsPerCompletedOrder=100
+	negaitvePointsPerWaste=20
+	negaitvePointsPerIncompleteOrder=30
 	bonusForPerfectBalance=500
 	offsetY=offsetY+55
 	local lableCheeseBurgersMade = display.newText( sceneGroup, translate["Made Cheeseburgers"] .. cheeseBurgersMade .. "✔" .. tostring(cheeseBurgersMade * pointsPerCompletedOrder) .. "pt" , display.contentCenterX, offsetY, "fonts/ume-tgc5.ttf", 50 )
@@ -117,9 +117,9 @@ function updateScene(sceneGroup)
 	inclmpleteOderPoints=0
 	bonus=0
 	--**frenchFries
-	pointsPerCompletedOrder=30
+	pointsPerCompletedOrder=50
 	negaitvePointsPerWaste=10
-	negaitvePointsPerIncompleteOrder=30
+	negaitvePointsPerIncompleteOrder=10
 	bonusForPerfectBalance=500
 
 	offsetY=offsetY+55

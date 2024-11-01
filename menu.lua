@@ -1,4 +1,5 @@
 require("i18n_dict")
+require("trial")
 local composer = require( "composer" )
 
 local scene = composer.newScene()
@@ -9,20 +10,29 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
 
 print( "ORIENTATION: "..system.orientation )
-
+function sendToDIfferentTrialStates()
+	local trialState=trialAlgorythm()
+	if trialState == "Free version" or trialState == "Trial period valid" then
+		composer.gotoScene( "difficulty" )
+	elseif trialState == "Trial period over" then
+		composer.gotoScene( "trialPeriodOver" )
+	elseif trialState == "Trial period start" then
+		composer.gotoScene( "trialPeriodStart" )
+	end
+end
 local function gotoGameEnglish()
 	composer.setVariable( "language", "English" )
-	composer.gotoScene( "difficulty" )
+	sendToDIfferentTrialStates()
 end
 
 local function gotoGameJapanese()
 	composer.setVariable( "language", "Japanese" )
-	composer.gotoScene( "difficulty" )
+	sendToDIfferentTrialStates()
 end
 
 local function gotoGameSpanish()
 	composer.setVariable( "language", "Spanish" )
-	composer.gotoScene( "difficulty" )
+	sendToDIfferentTrialStates()
 end
 
 local function gotoHighScores()
